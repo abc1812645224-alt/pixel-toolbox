@@ -46,7 +46,6 @@
 
 * **[ryfineZ / carrier-ims](https://github.com/ryfineZ/carrier-ims-for-pixel)**：特别致谢 ryfineZ 的开源项目，为本工具提供了 Pixel 5G/VoLTE 优化的核心实现思路。
 * **[RikkaApps / Shizuku](https://github.com/RikkaApps/Shizuku)**：感谢团队维护 Shizuku，让 Android 免 Root 系统级定制成为可能。
-* **[LSPosed / AndroidHiddenApiBypass](https://github.com/LSPosed/AndroidHiddenApiBypass)**：提供了绕过 Android 隐藏 API 限制的优雅方案。
 * 感谢 Google AOSP 社区提供的 **Jetpack Compose** 与 **Material 3** 设计规范。
 
 ---
