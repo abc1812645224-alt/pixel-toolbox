@@ -1,24 +1,58 @@
 # Pixel 工具箱 (Pixel Toolbox)
 
-这是一款专门为 Google Pixel 系列手机设计的免 Root 优化工具箱。它利用 [Shizuku](https://shizuku.rikka.app/) 获取系统权限，安全可靠，并且支持动态编译。
+这是一款专门为 Google Pixel 系列手机设计的**免 Root** 深度系统优化与极客工具箱。它通过调用 [Shizuku](https://shizuku.rikka.app/) 与 [LSPosed](https://github.com/LSPosed) 相关 API 获取系统级权限，安全可靠地实现多项本地化修复与系统级定制。
 
-## 功能列表
+**本项目已遵循 GPL-3.0 协议全面开源。请遵守开源协议及精神，尊重所有开发者的劳动成果。**
 
-1. **去除 WiFi 感叹号 (Captive Portal 修复)**：一键将验证服务器修改为国内可用的 MIUI 服务器，解决连上 WiFi 依然提示“网络无法连接”或带感叹号的问题。
-2. **时区与时间同步修复**：将系统强制定位到亚洲/上海，并将 NTP 时间同步服务器修改为阿里云（`ntp.aliyun.com`），解决时间慢的问题。
-3. **气密性检测 (防水检测)**：调用原生气压传感器实时监测气压变化，通过按压屏幕测试手机的气密性是否完好。
-4. **一键 5G / VoLTE 开启**：通过底层属性注入和设置修改，强制开启国内四大运营商的 5G 与 VoLTE/VoWiFi 功能。
+---
 
-## 编译方法 (通过 GitHub Actions)
+## 🌟 核心功能列表
 
-由于本项目支持通过 GitHub 云端直接编译，无需在本地安装复杂的 Android Studio：
+### 🌐 网络与通信优化
+1. **去除 WiFi 感叹号 (Captive Portal 修复)**：一键将网络验证服务器修改为国内可用的服务器，彻底解决连上 WiFi 依然提示“网络无法连接”的问题。
+2. **一键开启 5G / VoLTE**：通过系统底层属性注入与配置修改，强制开启国内四大运营商的 5G 与 VoLTE / VoWiFi / ViLTE 高清通话功能。
+3. **全局 DNS 切换**：支持一键切换为阿里云、腾讯云或去广告 DNS，提升解析速度并净化网络环境。
 
-1. 将本代码库上传或 Push 到您的 GitHub 仓库。
-2. 转到 GitHub 仓库页面的 **Actions** 标签。
-3. 点击 **Android Build CI**，然后点击右侧的 **Run workflow**。
+### ⚙️ 系统与本地化修复
+4. **时区与时间同步修复**：强制将系统定位到“亚洲/上海”，并将 NTP 时间同步服务器修改为国内服务器（如 `ntp.aliyun.com`），解决时间走时不准的问题。
+5. **系统 DPI / 屏幕显示调整**：支持免 Root 修改系统全局 DPI，自定义屏幕显示密度，满足不同视觉需求。
+6. **后台运行与权限管理 (App Ops)**：通过底层指令深度管理应用的后台运行权限，防止毒瘤应用后台耗电。
+
+### 🛠️ 极客专属工具
+7. **应用克隆 (App Clone)**：支持免 Root 环境下的应用双开与克隆。
+8. **气密性检测 (防水检测)**：调用原生气压传感器实时监测气压变化，通过按压屏幕测试手机防水气密性是否完好。
+9. **精准电池数据监测**：直接读取系统底层的 `sysfs` 节点，获取最真实的电池电压、电流与健康度数据。
+
+---
+
+## 🚀 编译与安装 (支持云端编译)
+
+由于本项目支持通过 GitHub Actions 云端直接编译，您无需在本地安装配置 Android Studio：
+
+1. **Fork** 本代码库到您的 GitHub 账号下。
+2. 转到仓库页面的 **Actions** 标签页。
+3. 点击左侧的 **Android Build CI**，然后点击右侧的 **Run workflow**。
 4. 编译完成后（约几分钟），进入该次运行的详情页。
-5. 在页面最下方的 **Artifacts** 区域，下载 `app-release` 压缩包。
+5. 在页面最下方的 **Artifacts** 区域，下载生成的 `app-release` 压缩包。
 6. 解压后将 APK 文件传到手机上进行安装。
 
-## 依赖与准备
-使用本软件的全部功能前，必须在手机上安装并激活 [Shizuku](https://shizuku.rikka.app/zh-hans/)。Shizuku 可以通过无线调试或连接电脑激活，具体激活方式请参考其官网。
+> **前提条件**：使用本软件的全部功能前，必须在手机上安装并激活 [Shizuku](https://shizuku.rikka.app/zh-hans/)。
+
+---
+
+## 🙏 开源致谢
+
+本项目的诞生离不开开源社区的无私奉献，特别感谢以下开发者与项目：
+
+* **[ryfineZ / carrier-ims](https://github.com/ryfineZ/carrier-ims-for-pixel)**：特别致谢 ryfineZ 的开源项目，为本工具提供了 Pixel 5G/VoLTE 优化的核心实现思路。
+* **[RikkaApps / Shizuku](https://github.com/RikkaApps/Shizuku)**：感谢团队维护 Shizuku，让 Android 免 Root 系统级定制成为可能。
+* **[LSPosed / AndroidHiddenApiBypass](https://github.com/LSPosed/AndroidHiddenApiBypass)**：提供了绕过 Android 隐藏 API 限制的优雅方案。
+* 感谢 Google AOSP 社区提供的 **Jetpack Compose** 与 **Material 3** 设计规范。
+
+---
+
+## ⚠️ 免责声明
+
+1. 本工具涉及对 Android 系统底层参数（如调制解调器、射频配置、系统设置数据库等）的直接修改。
+2. 修改网络配置或强制开启 5G/VoLTE 可能因地区和运营商差异导致信号丢失、无法接打电话或无法注册 IMS 等问题。
+3. 开发者不对因使用本工具导致的设备损坏、数据丢失、功能异常或违反运营商协议的后果负责。**请在充分了解操作后果的前提下谨慎使用**。
