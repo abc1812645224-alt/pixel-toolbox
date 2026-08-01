@@ -3830,18 +3830,18 @@ fun AboutScreen() {
                 Column(modifier = Modifier.fillMaxWidth()) {
 
                     Text(
-
                         "开源致谢",
-
                         fontWeight = FontWeight.Bold,
-
                         fontSize = 18.sp,
-
                         color = iOSLabel
-
                     )
-
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        "本项目已遵循 GPL-3.0 协议全面开源。请遵守开源协议及精神，尊重作者劳动成果。",
+                        fontSize = 13.sp,
+                        color = iOSSecondaryLabel
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
 
 
 
