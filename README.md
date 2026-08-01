@@ -1,6 +1,6 @@
 # Pixel 工具箱 (Pixel Toolbox)
 
-这是一款专门为 Google Pixel 系列手机设计的**免 Root** 深度系统优化与极客工具箱。它通过调用 [Shizuku](https://shizuku.rikka.app/) 与 [LSPosed](https://github.com/LSPosed) 相关 API 获取系统级权限，安全可靠地实现多项本地化修复与系统级定制。
+这是一款专门为 Google Pixel 系列手机设计的**免 Root** 深度系统优化与极客工具箱。它通过调用 [Shizuku](https://shizuku.rikka.app/) 获取系统级权限，安全可靠地实现多项本地化修复与系统级定制。
 
 **本项目已遵循 GPL-3.0 协议全面开源。请遵守开源协议及精神，尊重所有开发者的劳动成果。**
 
