@@ -1,0 +1,38 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 同关于页配色：蓝 #3B82F6 / 红 #EF4444 / 绿 #22C55E / 黄 #F59E0B -->
+    <!-- 圆角半径 22dp，匹配关于页 24dp / 80dp ≈ 30% -->
+
+    <!-- Top-Left: Blue -->
+    <path android:fillColor="#3B82F6"
+        android:pathData="M18,40 A22,22 0 0,1 40,18 L54,18 L54,54 L18,54 Z" />
+
+    <!-- Top-Right: Red -->
+    <path android:fillColor="#EF4444"
+        android:pathData="M54,18 L68,18 A22,22 0 0,1 90,40 L90,54 L54,54 Z" />
+
+    <!-- Bottom-Left: Green -->
+    <path android:fillColor="#22C55E"
+        android:pathData="M18,54 L18,68 A22,22 0 0,0 40,90 L54,90 L54,54 Z" />
+
+    <!-- Bottom-Right: Yellow -->
+    <path android:fillColor="#F59E0B"
+        android:pathData="M54,54 L54,90 L68,90 A22,22 0 0,0 90,68 L90,54 Z" />
+
+    <!-- White circle (r=16dp 匹配关于页 36dp/80dp ≈ 45%) -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M54,38 A16,16 0 1,1 54,70 A16,16 0 1,1 54,38 Z" />
+
+    <!-- "i" dot -->
+    <path android:fillColor="#3B82F6"
+        android:pathData="M50.5,43 h7 a2,2 0 0,1 2,2 v1.5 a2,2 0 0,1 -2,2 h-7 a2,2 0 0,1 -2,-2 v-1.5 a2,2 0 0,1 2,-2 z" />
+
+    <!-- "i" body -->
+    <path android:fillColor="#3B82F6"
+        android:pathData="M50.5,50 h7 a2,2 0 0,1 2,2 v6 a2,2 0 0,1 -2,2 h-7 a2,2 0 0,1 -2,-2 v-6 a2,2 0 0,1 2,-2 z" />
+
+</vector>

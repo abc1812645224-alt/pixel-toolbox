@@ -1,0 +1,4 @@
+{
+  "title": "Respectful Inquiry: Intention to Integrate Shizuku/LSPosed API in GPL-3.0 Open Source Project",
+  "body": "Dear maintainers,\n\nFirst of all, thank you very much for your excellent work on this project. I am the developer of [Pixel Toolbox](https://github.com/abc1812645224-alt/pixel-toolbox), a non-root optimization tool for Pixel devices.\n\nI am writing to respectfully inform you that I have integrated your API into my project. To comply with the open-source spirit and ensure I respect your licenses (including GPL-3.0 and Apache 2.0), I have fully open-sourced my project under the GPL-3.0 license. \n\nI just wanted to drop a message to express my gratitude and ensure that I am following the community guidelines properly. If there is anything else I should be aware of regarding the integration, please let me know.\n\nThank you for your time and for providing such an amazing tool to the community!\n\nBest regards,\nDeveloper of Pixel Toolbox"
+}

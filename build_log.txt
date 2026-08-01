@@ -1,0 +1,127 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :app:mergeReleaseNativeLibs NO-SOURCE
+> Task :app:stripReleaseDebugSymbols NO-SOURCE
+> Task :app:extractReleaseNativeSymbolTables NO-SOURCE
+> Task :app:mergeReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :app:checkReleaseDuplicateClasses UP-TO-DATE
+> Task :stub:preBuild UP-TO-DATE
+> Task :stub:preReleaseBuild UP-TO-DATE
+> Task :stub:compileReleaseAidl UP-TO-DATE
+> Task :app:compileReleaseAidl UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:generateReleaseBuildConfig UP-TO-DATE
+> Task :app:checkReleaseAarMetadata UP-TO-DATE
+> Task :app:generateReleaseResValues UP-TO-DATE
+> Task :app:mapReleaseSourceSetPaths
+> Task :app:generateReleaseResources UP-TO-DATE
+> Task :app:packageReleaseResources
+> Task :app:createReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+> Task :app:processReleaseMainManifest UP-TO-DATE
+> Task :app:processReleaseManifest UP-TO-DATE
+> Task :app:processReleaseManifestForPackage UP-TO-DATE
+> Task :stub:generateReleaseResValues UP-TO-DATE
+> Task :stub:generateReleaseResources UP-TO-DATE
+> Task :stub:packageReleaseResources UP-TO-DATE
+> Task :stub:parseReleaseLocalResources UP-TO-DATE
+> Task :stub:processReleaseManifest UP-TO-DATE
+> Task :stub:generateReleaseRFile UP-TO-DATE
+> Task :stub:javaPreCompileRelease UP-TO-DATE
+> Task :stub:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :stub:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :app:javaPreCompileRelease UP-TO-DATE
+> Task :app:mergeReleaseArtProfile UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:mergeReleaseShaders UP-TO-DATE
+> Task :app:compileReleaseShaders NO-SOURCE
+> Task :app:generateReleaseAssets UP-TO-DATE
+> Task :app:parseReleaseLocalResources
+> Task :app:mergeReleaseAssets UP-TO-DATE
+> Task :app:compressReleaseAssets UP-TO-DATE
+> Task :app:processApplicationManifestReleaseForBundle UP-TO-DATE
+> Task :app:collectReleaseDependencies UP-TO-DATE
+> Task :app:sdkReleaseDependencyData UP-TO-DATE
+> Task :app:writeReleaseAppMetadata UP-TO-DATE
+> Task :app:writeReleaseSigningConfigVersions UP-TO-DATE
+> Task :stub:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :stub:mergeReleaseNativeLibs NO-SOURCE
+> Task :stub:stripReleaseDebugSymbols NO-SOURCE
+> Task :stub:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :stub:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :stub:extractReleaseAnnotations UP-TO-DATE
+> Task :stub:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :stub:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :stub:mergeReleaseShaders UP-TO-DATE
+> Task :stub:compileReleaseShaders NO-SOURCE
+> Task :stub:generateReleaseAssets UP-TO-DATE
+> Task :stub:packageReleaseAssets UP-TO-DATE
+> Task :stub:prepareLintJarForPublish UP-TO-DATE
+> Task :stub:prepareReleaseArtProfile UP-TO-DATE
+> Task :stub:processReleaseJavaRes NO-SOURCE
+> Task :stub:mergeReleaseJavaResource UP-TO-DATE
+> Task :stub:syncReleaseLibJars UP-TO-DATE
+> Task :stub:writeReleaseAarMetadata UP-TO-DATE
+> Task :stub:bundleReleaseAar UP-TO-DATE
+> Task :stub:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :stub:mergeReleaseResources UP-TO-DATE
+> Task :stub:verifyReleaseResources UP-TO-DATE
+> Task :stub:assembleRelease UP-TO-DATE
+> Task :app:mergeReleaseResources
+> Task :app:processReleaseResources
+> Task :app:bundleReleaseResources
+> Task :app:compileReleaseKotlin
+w: Flag is not supported by this version of the compiler: -Xencoding=UTF-8
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/MainActivity.kt:460:9 Variable 'textColor' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/MainActivity.kt:559:9 Parameter 'permissions' is never used, could be renamed to _
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/MainActivity.kt:1679:5 Parameter 'textColor' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/MainActivity.kt:1737:5 Parameter 'basePressure' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/MainActivity.kt:2298:72 'VIBRATOR_SERVICE: String' is deprecated. Deprecated in Java
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/MainActivity.kt:3178:44 Parameter 'idx' is never used, could be renamed to _
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ims/ImsModifier.kt:14:31 'prepareMainLooper(): Unit' is deprecated. Deprecated in Java
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/shizuku/ConfigReaderHelper.kt:17:31 'prepareMainLooper(): Unit' is deprecated. Deprecated in Java
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/shizuku/ImsConfigServiceImpl.kt:60:13 Variable 'subIdArg' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/shizuku/ImsModifier.kt:365:94 'getter for mcc: Int' is deprecated. Deprecated in Java
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/shizuku/ImsModifier.kt:366:97 'getter for mnc: Int' is deprecated. Deprecated in Java
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/shizuku/ShizukuUtils.kt:232:9 This is a delicate API and its use requires care. Make sure you fully read and understand documentation of the declaration that is marked as a delicate API.
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/signal/SignalMonitor.kt:583:29 Unnecessary safe call on a non-null receiver of type (Mutable)List<CellSignalStrength!>
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/signal/SignalMonitor.kt:621:29 Unnecessary safe call on a non-null receiver of type (Mutable)List<CellSignalStrength!>
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/custom/BatteryActivity.kt:78:9 Variable 'bm' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/AppCloneActivity.kt:536:59 'constructor Builder(String!, PrivateKey!, (Mutable)List<X509Certificate!>!)' is deprecated. Deprecated in Java
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/AppCloneActivity.kt:572:55 'constructor Builder(String!, PrivateKey!, (Mutable)List<X509Certificate!>!)' is deprecated. Deprecated in Java
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/AppCloneActivity.kt:711:17 Variable 'charWidth' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/AppCloneActivity.kt:1027:17 The value '((b1 and 0x7F) shl 8) or b2' assigned to 'var charLen: Int defined in com.example.pixeltoolbox.ui.geektools.AppCloneActivity.readPoolStringByIndex' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/AppCloneActivity.kt:1030:17 The value 'b1' assigned to 'var charLen: Int defined in com.example.pixeltoolbox.ui.geektools.AppCloneActivity.readPoolStringByIndex' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/GeekToolsUI.kt:40:9 Variable 'batteryData' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/GeekToolsUI.kt:41:9 Variable 'batteryError' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/GeekToolsUI.kt:259:37 Variable 'key' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/GpsTestScreen.kt:192:33 'registerGnssStatusCallback(GnssStatus.Callback): Boolean' is deprecated. Deprecated in Java
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/GpsTestScreen.kt:357:33 Variable 'consumedByHoriz' is assigned but never accessed
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/GpsTestScreen.kt:379:37 The value 'false' assigned to 'var consumedByHoriz: Boolean defined in com.example.pixeltoolbox.ui.geektools.GlobeCard.`<anonymous>`.`<anonymous>`.`<anonymous>`.`<anonymous>`' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/GpsTestScreen.kt:389:37 The value 'true' assigned to 'var consumedByHoriz: Boolean defined in com.example.pixeltoolbox.ui.geektools.GlobeCard.`<anonymous>`.`<anonymous>`.`<anonymous>`.`<anonymous>`' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/geektools/GpsTestScreen.kt:393:37 The value 'false' assigned to 'var consumedByHoriz: Boolean defined in com.example.pixeltoolbox.ui.geektools.GlobeCard.`<anonymous>`.`<anonymous>`.`<anonymous>`.`<anonymous>`' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/theme/Skeuomorphic.kt:51:5 Parameter 'contentColor' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/theme/Theme.kt:19:5 Parameter 'dynamicColor' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/widget/LunarDateUtils.kt:41:13 Variable 'branches' is never used
+w: file:///F:/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/widget/WeatherProvider.kt:59:50 'getFromLocation(Double, Double, Int): (Mutable)List<Address!>?' is deprecated. Deprecated in Java
+
+> Task :app:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :app:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :app:processReleaseJavaRes
+> Task :app:expandReleaseArtProfileWildcards
+> Task :app:mergeReleaseJavaResource
+> Task :app:minifyReleaseWithR8
+> Task :app:compileReleaseArtProfile
+> Task :app:shrinkReleaseRes
+> Task :app:optimizeReleaseResources
+> Task :app:packageRelease
+> Task :app:createReleaseApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleRelease
+
+BUILD SUCCESSFUL in 2m 52s
+68 actionable tasks: 16 executed, 52 up-to-date
