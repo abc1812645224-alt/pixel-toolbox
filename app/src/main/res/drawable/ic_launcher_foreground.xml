@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- White Circle (Radius 16) -->
+    <path android:fillColor="#FFFFFF"
+          android:pathData="M 54,38 A 16,16 0 1 1 54,70 A 16,16 0 1 1 54,38 Z"/>
+          
+    <!-- The letter 'i' (dot, radius 2.5) -->
+    <path android:fillColor="#3B82F6"
+          android:pathData="M 54,41 A 2.5,2.5 0 1 1 54,46 A 2.5,2.5 0 1 1 54,41 Z"/>
+          
+    <!-- The letter 'i' (stem with rounded caps) -->
+    <path android:fillColor="#3B82F6"
+          android:pathData="M 52,50 Q 52,48 54,48 Q 56,48 56,50 V 60 Q 56,62 54,62 Q 52,62 52,60 Z"/>
+</vector>

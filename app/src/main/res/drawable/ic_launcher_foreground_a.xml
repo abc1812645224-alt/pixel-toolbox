@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 方案A: 像素格 - 彩色小方块拼成扳手 -->
+    <!-- 背景 -->
+    <path android:fillColor="#1A1A2E" android:pathData="M 0,0 h 108 v 108 h -108 z" />
+
+    <!-- 扳手头 - 4x3像素格 蓝 -->
+    <path android:fillColor="#4285F4" android:pathData="M 38,30 h 8 v 8 h -8 z M 46,30 h 8 v 8 h -8 z M 54,30 h 8 v 8 h -8 z" />
+    <path android:fillColor="#4285F4" android:pathData="M 38,38 h 8 v 8 h -8 z M 46,38 h 8 v 8 h -8 z M 54,38 h 8 v 8 h -8 z" />
+
+    <!-- 扳手杆 - 3x6像素格 绿色过渡 -->
+    <path android:fillColor="#34A853" android:pathData="M 46,46 h 8 v 8 h -8 z M 46,54 h 8 v 8 h -8 z M 46,62 h 8 v 8 h -8 z M 46,70 h 8 v 8 h -8 z" />
+
+    <!-- 扳手尾部 - 红黄点缀 -->
+    <path android:fillColor="#EA4335" android:pathData="M 54,38 h 8 v 8 h -8 z" />
+    <path android:fillColor="#FBBC05" android:pathData="M 38,46 h 8 v 8 h -8 z" />
+
+    <!-- 右下角像素点缀 -->
+    <path android:fillColor="#4285F4" android:pathData="M 70,70 h 6 v 6 h -6 z" />
+    <path android:fillColor="#34A853" android:pathData="M 76,70 h 6 v 6 h -6 z" />
+    <path android:fillColor="#FBBC05" android:pathData="M 70,76 h 6 v 6 h -6 z" />
+    <path android:fillColor="#EA4335" android:pathData="M 76,76 h 6 v 6 h -6 z" />
+
+</vector>

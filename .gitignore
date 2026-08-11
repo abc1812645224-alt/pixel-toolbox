@@ -1,0 +1,16 @@
+*.iml
+.gradle/
+**/build/
+/local.properties
+.idea/
+*.log
+gradle.zip
+jdk.zip
+gradle-8.2/
+jdk/
+*_20*_*.properties
+*_20*_*.xml
+*_backup.xml
+.DS_Store
+*.apk
+*.aab

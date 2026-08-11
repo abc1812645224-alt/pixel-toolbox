@@ -1,0 +1,142 @@
+﻿    // 物理级强制保活
+    var selectedApps by remember { mutableStateOf(listOf(AppItem("微信", "com.tencent.mm"))) }
+    var isKeepAliveEnabled by remember { mutableStateOf(KeepAliveService.isRunning) }
+    var showAppPicker by remember { mutableStateOf(false) }
+    var installedApps by remember { mutableStateOf<List<AppItem>>(emptyList()) }
+    var loadingApps by remember { mutableStateOf(false) }
+    val pm = context.packageManager
+    
+    if (showAppPicker) {
+        Dialog(onDismissRequest = { showAppPicker = false }) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colors.surface,
+                modifier = Modifier.fillMaxWidth().height(400.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("选择要保活的应用 (最多3个)", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    if (loadingApps) {
+                        Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
+                    } else {
+                        LazyColumn(modifier = Modifier.weight(1f)) {
+                            items(installedApps) { app ->
+                                val isSelected = selectedApps.any { it.packageName == app.packageName }
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth().clickable {
+                                        if (isSelected) {
+                                            selectedApps = selectedApps.filter { it.packageName != app.packageName }
+                                        } else {
+                                            if (selectedApps.size < 3) {
+                                                selectedApps = selectedApps + app
+                                            } else {
+                                                Toast.makeText(context, "最多只能选择3个应用", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }.padding(vertical = 8.dp)
+                                ) {
+                                    Checkbox(checked = isSelected, onCheckedChange = null)
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Column {
+                                        Text(app.name, fontWeight = FontWeight.Medium)
+                                        Text(app.packageName, fontSize = 12.sp, color = Color.Gray)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    iOSOutlineButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { showAppPicker = false }
+                    ) { Text("完成") }
+                }
+            }
+        }
+    }
+    
+    GlassCard(modifier = Modifier.fillMaxWidth()) {
+        Column {
+            Text("物理级强制保活 (免 Root)", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = iOSLabel)
+            Spacer(modifier = Modifier.height(6.dp))
+            Text("【高耗电警告】通过定时唤醒锁强制拉起 CPU，防止消息延迟。重启后失效。", fontSize = 12.sp, color = iOSRed, fontWeight = FontWeight.SemiBold)
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            // 已选应用展示
+            Text("已选应用：", fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+            Spacer(modifier = Modifier.height(4.dp))
+            if (selectedApps.isEmpty()) {
+                Text("未选择任何应用", color = Color.Gray, fontSize = 13.sp)
+            } else {
+                selectedApps.forEach { app ->
+                    Text("•  ()", fontSize = 13.sp, color = iOSLabel)
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            if (!isKeepAliveEnabled) {
+                iOSOutlineButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        loadingApps = true
+                        showAppPicker = true
+                        coroutineScope.launch {
+                            if (installedApps.isEmpty()) {
+                                installedApps = loadInstalledApps(pm)
+                            }
+                            loadingApps = false
+                        }
+                    }
+                ) { Text("+ 添加 / 修改应用", fontWeight = FontWeight.SemiBold) }
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+            
+            if (isKeepAliveEnabled) {
+                iOSOutlineButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        val intent = Intent(context, KeepAliveService::class.java)
+                        context.stopService(intent)
+                        isKeepAliveEnabled = false
+                        KeepAliveService.isRunning = false
+                        Toast.makeText(context, "已停止强制保活", Toast.LENGTH_SHORT).show()
+                    }
+                ) { Text("停止唤醒", color = iOSRed, fontWeight = FontWeight.SemiBold) }
+            } else {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        if (selectedApps.isEmpty()) {
+                            Toast.makeText(context, "请先选择至少一个应用", Toast.LENGTH_SHORT).show()
+                            return@Surface
+                        }
+                        val intent = Intent(context, KeepAliveService::class.java).apply {
+                            putExtra("PACKAGE_NAMES", selectedApps.map { it.packageName }.toTypedArray())
+                            putExtra("INTERVAL_MINS", 3)
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            context.startForegroundService(intent)
+                        } else {
+                            context.startService(intent)
+                        }
+                        isKeepAliveEnabled = true
+                        KeepAliveService.isRunning = true
+                        Toast.makeText(context, "开启 3分钟/次 的后台唤醒", Toast.LENGTH_SHORT).show()
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    color = iOSRed
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("开启强制唤醒", color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+                    }
+                }
+            }
+        }
+    }

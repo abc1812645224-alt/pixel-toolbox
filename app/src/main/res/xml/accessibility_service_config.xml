@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    无障碍服务仅用于锁屏：
+    * 不指定 accessibilityEventTypes，不监听任何事件
+    * packageNames 为空列表，不读取任何应用数据
+    * 不请求触摸探索模式，不破坏正常滑动交互
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityFlags="flagDefault"
+    android:canRequestEnhancedWebAccessibility="false"
+    android:canRequestFilterKeyEvents="false"
+    android:canRequestTouchExplorationMode="false"
+    android:canRetrieveWindowContent="false"
+    android:description="@string/accessibility_service_description"
+    android:packageNames="" />

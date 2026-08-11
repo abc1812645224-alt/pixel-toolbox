@@ -1,0 +1,7 @@
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+注: 某些输入文件使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+注: F:\pixel-toolbox (5)\app\src\main\java\com\example\pixeltoolbox\ui\custom\AppListActivity.java使用了未经检查或不安全的操作。
+注: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+注: F:\pixel-toolbox (5)\app\build\generated\hilt\component_sources\debug\com\example\pixeltoolbox\Hilt_PixelToolboxApplication.java使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。

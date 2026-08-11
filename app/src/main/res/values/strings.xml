@@ -1,0 +1,86 @@
+<resources>
+    <string name="app_name">像素工具箱</string>
+    <string name="accessibility_service_description">用于极简桌面双击空白处锁屏。仅执行系统锁屏动作，不读取任何屏幕内容。</string>
+    <string name="desk_lock_screen_failed">锁屏失败，请检查无障碍服务或 Shizuku 授权</string>
+    <string name="desk_lock_screen_not_enabled">未开启无障碍锁屏服务，请开启后重试</string>
+    <string name="desk_lock_open_settings">正在跳转无障碍设置…</string>
+    <!-- ===== Call Recording (ported from ShizuCallRecorder) ===== -->
+    <string name="audio_codec_aac" translatable="false">AAC</string>
+    <string name="audio_codec_opus" translatable="false">Opus</string>
+    <string name="audio_source_mic" translatable="false">Standard microphone</string>
+    <string name="audio_source_mic_camcorder" translatable="false">Camcorder mic</string>
+    <string name="audio_source_mic_camcorder_description">面向录像场景优化，优先采集摄像头方向的音频。</string>
+    <string name="audio_source_mic_description">直接采集设备主麦克风的音频，带轻微降噪。</string>
+    <string name="audio_source_mic_unprocessed" translatable="false">Unprocessed mic</string>
+    <string name="audio_source_mic_unprocessed_description">采集原始麦克风音频，不做任何自动过滤或增强。</string>
+    <string name="audio_source_mic_voice_recognition" translatable="false">Voice recognition mic</string>
+    <string name="audio_source_mic_voice_recognition_description">针对语音识别优化的麦克风模式（降噪）。</string>
+    <string name="audio_source_output" translatable="false">Audio output (remote submix)</string>
+    <string name="audio_source_output_description">采集最终合并后的完整音频，与输出到扬声器的内容一致。</string>
+    <string name="audio_source_playback" translatable="false">Audio playback</string>
+    <string name="audio_source_playback_description">采集其他应用的播放音频（尊重应用自身的录音限制标志）。</string>
+    <string name="audio_source_voice_call" translatable="false">Voice call</string>
+    <string name="audio_source_voice_call_description">录制通话双方的声音，含电话音调的原始音频。</string>
+    <string name="audio_source_voice_call_downlink" translatable="false">Voice call downlink</string>
+    <string name="audio_source_voice_call_downlink_description">仅录制通话中对方的声音（下行链路）。</string>
+    <string name="audio_source_voice_call_uplink" translatable="false">Voice call uplink</string>
+    <string name="audio_source_voice_call_uplink_description">仅录制通话中你的声音（上行链路）。</string>
+    <string name="audio_source_voice_comm" translatable="false">Voice communication mic</string>
+    <string name="audio_source_voice_comm_description">针对语音通话调优的麦克风音频源，内置回声消除。</string>
+    <string name="audio_source_voice_performance" translatable="false">Voice performance</string>
+    <string name="audio_source_voice_performance_description">高速麦克风模式，面向现场音乐和实时音频应用。</string>
+    <string name="delete_recording_confirmation_failed">删除录音失败，请查看应用日志。</string>
+    <string name="delete_recording_confirmation_message">确定要删除这条录音吗？此操作无法撤销。</string>
+    <string name="delete_recording_confirmation_title">删除录音</string>
+    <string name="general_cancel">取消</string>
+    <string name="general_delete">删除</string>
+    <string name="general_deleted">已删除</string>
+    <string name="general_incoming">来电</string>
+    <string name="general_outgoing">去电</string>
+    <string name="general_pause">暂停</string>
+    <string name="general_play">播放</string>
+    <string name="general_record">录音</string>
+    <string name="general_resume">继续</string>
+    <string name="general_share">分享</string>
+    <string name="placeholder_caller_name_desc">来电者姓名，优先查通讯录，无记录时回退到运营商来电显示</string>
+    <string name="placeholder_cross_country_desc">是否为异地通话（true/false）</string>
+    <string name="placeholder_date_day_desc">当月日期，补零显示（01-31）</string>
+    <string name="placeholder_date_desc">当前日期和时间</string>
+    <string name="placeholder_date_hours_desc">当前小时，24 小时制补零（00-23）</string>
+    <string name="placeholder_date_minutes_desc">当前分钟，补零显示（00-59）</string>
+    <string name="placeholder_date_month_desc">当前月份，补零显示（01-12）</string>
+    <string name="placeholder_date_seconds_desc">当前秒数，补零显示（00-59）</string>
+    <string name="placeholder_date_year_desc">当前年份（如 2026）</string>
+    <string name="placeholder_direction_desc">通话方向（来电/去电）</string>
+    <string name="placeholder_package_name_desc">发起通话的应用名称或包名</string>
+    <string name="placeholder_phone_number_desc">电话号码</string>
+    <string name="placeholder_sequence_desc">自动递增的录音序号（如 001）</string>
+    <string name="post_recording_notification_title">录音管理</string>
+    <string name="post_recording_notification_unknown_caller">匿名或未知来电</string>
+    <string name="recording_error_file_creation">创建录音文件失败。请检查存储权限，或在应用设置中重新选择录音保存目录。</string>
+    <string name="recording_error_folder_missing">所选保存目录缺失、无效，或没有写入权限。请在应用设置中重新选择。</string>
+    <string name="recording_error_server_missing">Scrcpy-server 二进制文件缺失或 SHA256 安全校验失败。正常情况下不应出现，请反馈此问题。</string>
+    <string name="recording_error_shizuku_disconnected_unexpectedly">Shizuku 意外断开，录音进程已停止（Shizuku-Server 进程退出）。</string>
+    <string name="recording_error_start_failed">录音启动失败。调用 ShellService 服务时发生错误。</string>
+    <string name="recording_error_title">录音错误</string>
+    <string name="recording_notification_cross_country_tip">🌐异地通话</string>
+    <string name="recording_notification_current_country_tip">🏠本地通话</string>
+    <string name="recording_notification_press_to_pause">点击暂停录音</string>
+    <string name="recording_notification_press_to_resume">点击继续录音</string>
+    <string name="recording_notification_press_to_start">点击开始录音</string>
+    <string name="recording_notification_title">正在录音</string>
+    <string name="recording_notification_waiting_shizuku">正在等待 Shizuku 服务启动…</string>
+    <string name="recording_shizuku_auth_key_missing">Shizuku 认证密钥缺失。请在应用设置中填写。</string>
+    <string name="recording_shizuku_not_started">Shizuku 服务已停止。请启动 Shizuku，并确保应用录音时 Shizuku 始终在运行。</string>
+    <string name="recording_shizuku_permission_denied">请授权应用使用 Shizuku，当前权限被拒绝。</string>
+    <string name="recording_standby_notification_title">通话进行中</string>
+    <string name="recording_started">开始录音。</string>
+    <string name="recording_toast_ended">通话已结束，录音已停止。</string>
+    <string name="recording_toast_paused">录音已暂停。</string>
+    <string name="recording_toast_resumed">录音已继续。</string>
+    <string name="recording_toast_standby">%1$s通话待机中。</string>
+    <string name="recording_unexpected_error">录音过程中出现意外错误。请反馈复现步骤和应用日志。</string>
+    <string name="settings_theme_mode_dark">Dark</string>
+    <string name="settings_theme_mode_light">Light</string>
+    <string name="settings_theme_mode_system">System default</string>
+</resources>
