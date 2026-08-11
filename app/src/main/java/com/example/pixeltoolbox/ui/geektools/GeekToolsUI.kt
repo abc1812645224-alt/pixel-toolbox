@@ -236,17 +236,18 @@ fun GeekToolsCard(context: Context, textColor: Color, addLog: (String) -> Unit, 
                             addLog("🎮 正在开启游戏模式...")
                             var allOk = true
 
-                            // 1. 高性能电源模式
-                            val powerResult = ShizukuUtils.executeCommand("cmd power set-mode 0; cmd power set-fixed-performance-mode-enabled true; echo 'performance' > /data/local/tmp/pixel_cpu_mode")
-                            if (powerResult.isSuccess) addLog("✅ 高性能电源模式已开启")
+                            // 1. 高性能电源模式（含锁定峰值刷新率，覆盖省电模式留下的 60Hz 锁）
+                            val powerResult = ShizukuUtils.executeCommand("cmd power set-mode 0 2>/dev/null; cmd power set-fixed-performance-mode-enabled true 2>/dev/null; r=\$(settings get system peak_refresh_rate 2>/dev/null); [ \"\$r\" = \"null\" ] && r=120; [ -z \"\$r\" ] && r=120; settings put system min_refresh_rate \$r 2>/dev/null; settings put system peak_refresh_rate \$r 2>/dev/null; echo 'performance' > /data/local/tmp/pixel_cpu_mode")
+                            if (powerResult.isSuccess) addLog("✅ 高性能电源模式已开启（已锁定峰值刷新率）")
                             else { addLog("⚠️ 电源模式设置失败: ${powerResult.exceptionOrNull()?.message}"); allOk = false }
 
-                            // 2. 关闭系统动画
-                            val animCmds = listOf(
-                                "settings put global window_animation_scale 0",
-                                "settings put global transition_animation_scale 0",
-                                "settings put global animator_duration_scale 0"
-                            )
+                            // 2. 保存动画原值并关闭系统动画（取消时据此完整恢复）
+                            val animKeys = listOf("window_animation_scale", "transition_animation_scale", "animator_duration_scale")
+                            val origAnims = animKeys.map { key ->
+                                ShizukuUtils.executeCommand("settings get global $key").getOrNull()?.trim() ?: ""
+                            }
+                            ShizukuUtils.executeCommand("echo '${origAnims.joinToString("|")}' > /data/local/tmp/pixel_game_anim")
+                            val animCmds = animKeys.map { key -> "settings put global $key 0" }
                             animCmds.forEach { cmd ->
                                 val r = ShizukuUtils.executeCommand(cmd)
                                 if (r.isSuccess) addLog("✅ 动画已关闭: ${cmd.substringAfterLast(" ")}")
@@ -296,22 +297,25 @@ fun GeekToolsCard(context: Context, textColor: Color, addLog: (String) -> Unit, 
                             addLog("🔄 正在取消游戏模式...")
                             var allOk = true
 
-                            // 1. 恢复默认电源模式
-                            val powerResult = ShizukuUtils.executeCommand("cmd power set-mode 0; cmd power set-fixed-performance-mode-enabled false; echo 'default' > /data/local/tmp/pixel_cpu_mode")
-                            if (powerResult.isSuccess) addLog("✅ 电源模式已恢复默认")
+                            // 1. 恢复默认电源模式（set-mode 0 + 关闭固定性能锁频 + 删除刷新率锁恢复自动，不残留）
+                            val powerResult = ShizukuUtils.executeCommand("cmd power set-mode 0 2>/dev/null; cmd power set-fixed-performance-mode-enabled false 2>/dev/null; settings delete system min_refresh_rate 2>/dev/null; settings delete system peak_refresh_rate 2>/dev/null; for g in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do echo schedutil > \$g 2>/dev/null; done; echo 'default' > /data/local/tmp/pixel_cpu_mode")
+                            if (powerResult.isSuccess) addLog("✅ 电源模式已恢复默认（刷新率已恢复系统默认）")
                             else { addLog("⚠️ 电源模式恢复失败: ${powerResult.exceptionOrNull()?.message}"); allOk = false }
 
-                            // 2. 恢复系统动画
-                            val animCmds = listOf(
-                                "settings put global window_animation_scale 1.0",
-                                "settings put global transition_animation_scale 1.0",
-                                "settings put global animator_duration_scale 1.0"
-                            )
-                            animCmds.forEach { cmd ->
-                                val r = ShizukuUtils.executeCommand(cmd)
-                                if (r.isSuccess) addLog("✅ 动画已恢复: ${cmd.substringAfterLast(" ")}")
+                            // 2. 恢复系统动画（优先恢复开启前保存的原值，无记录则回退 1.0）
+                            val animKeys = listOf("window_animation_scale", "transition_animation_scale", "animator_duration_scale")
+                            val savedAnims = ShizukuUtils.executeCommand("cat /data/local/tmp/pixel_game_anim").getOrNull()?.trim()
+                            val savedValues = savedAnims?.split("|")
+                            animKeys.forEachIndexed { i, key ->
+                                var restoreValue = "1.0"
+                                if (savedValues != null && i < savedValues.size && savedValues[i].isNotBlank() && savedValues[i] != "null") {
+                                    restoreValue = savedValues[i]
+                                }
+                                val r = ShizukuUtils.executeCommand("settings put global $key $restoreValue")
+                                if (r.isSuccess) addLog("✅ 动画已恢复: $key = $restoreValue")
                                 else { addLog("⚠️ 动画恢复失败: ${r.exceptionOrNull()?.message}"); allOk = false }
                             }
+                            ShizukuUtils.executeCommand("rm -f /data/local/tmp/pixel_game_anim 2>/dev/null")
 
                             // 3. 恢复触控默认值
                             val touchRestore = listOf(

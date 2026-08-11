@@ -320,12 +320,19 @@ fun SystemScreen(
                     currentVibLevel = level
                 }
                 
-                // 读取真实CPU模式 (利用 /data/local/tmp 重启自动清空的特性实现系统状态一致性)
+                // 读取真实CPU模式：以系统真实状态为准。
+                // 省电 = cmd power get-mode == 1（系统真实省电状态）
+                // 性能 = cmd power get-fixed-performance-mode-enabled == true/1（系统真实固定性能模式）
+                // 标记文件仅作辅助/兜底，避免 UI 与实际状态脱节
+                val realModeRes = com.example.pixeltoolbox.shizuku.ShizukuUtils.executeCommand("cmd power get-mode 2>/dev/null").getOrNull()?.trim()
+                val perfModeRes = com.example.pixeltoolbox.shizuku.ShizukuUtils.executeCommand("cmd power get-fixed-performance-mode-enabled 2>/dev/null").getOrNull()?.trim()
                 val cpuModeRes = com.example.pixeltoolbox.shizuku.ShizukuUtils.executeCommand("cat /data/local/tmp/pixel_cpu_mode").getOrNull()?.trim()
-                if (cpuModeRes == "saver" || cpuModeRes == "performance") {
-                    currentCpuMode = cpuModeRes
-                } else {
-                    currentCpuMode = "default"
+                val perfRealOn = perfModeRes == "true" || perfModeRes == "1" || perfModeRes == "enabled"
+                currentCpuMode = when {
+                    realModeRes == "1" -> "saver"
+                    perfRealOn -> "performance"
+                    cpuModeRes == "performance" -> "performance"
+                    else -> "default"
                 }
             }
         }
@@ -343,14 +350,14 @@ fun SystemScreen(
                     "performance" to "性能"
                 ).forEach { (mode, label) ->
                     val cmd = when (mode) {
-                        "saver" -> "cmd power set-mode 1 2>/dev/null; cmd power set-fixed-performance-mode-enabled false 2>/dev/null; echo 'saver' > /data/local/tmp/pixel_cpu_mode"
-                        "performance" -> "cmd power set-mode 0 2>/dev/null; cmd power set-fixed-performance-mode-enabled true 2>/dev/null; echo 'performance' > /data/local/tmp/pixel_cpu_mode"
-                        else -> "cmd power set-mode 0 2>/dev/null; cmd power set-fixed-performance-mode-enabled false 2>/dev/null; echo 'default' > /data/local/tmp/pixel_cpu_mode"
+                        "saver" -> "cmd power set-fixed-performance-mode-enabled false 2>/dev/null; for g in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do echo powersave > \$g 2>/dev/null; done; settings put system min_refresh_rate 60 2>/dev/null; settings put system peak_refresh_rate 60 2>/dev/null; echo 'saver' > /data/local/tmp/pixel_cpu_mode"
+                        "performance" -> "cmd power set-mode 0 2>/dev/null; cmd power set-fixed-performance-mode-enabled true 2>/dev/null; r=\$(settings get system peak_refresh_rate 2>/dev/null); [ \"\$r\" = \"null\" ] && r=120; [ -z \"\$r\" ] && r=120; settings delete system min_refresh_rate 2>/dev/null; settings put system peak_refresh_rate \$r 2>/dev/null; echo 'performance' > /data/local/tmp/pixel_cpu_mode"
+                        else -> "cmd power set-mode 0 2>/dev/null; cmd power set-fixed-performance-mode-enabled false 2>/dev/null; settings delete system min_refresh_rate 2>/dev/null; settings delete system peak_refresh_rate 2>/dev/null; echo 'default' > /data/local/tmp/pixel_cpu_mode"
                     }
                     val successMsg = when (mode) {
-                        "saver" -> "省电模式 (系统电源管理)"
-                        "performance" -> "性能模式 (系统电源管理)"
-                        else -> "均衡默认模式 (系统电源管理)"
+                        "saver" -> "省电模式 (CPU降频 + 60Hz刷新率)"
+                        "performance" -> "性能模式 (性能锁频 + 动态高刷新率)"
+                        else -> "均衡默认模式 (恢复系统调度与刷新率)"
                     }
                     val onClick = fun() {
                         if (!ShizukuUtils.hasShizukuPermission()) {
@@ -401,7 +408,7 @@ fun SystemScreen(
                             handleResult(context, ShizukuUtils.executeCommand(cmd), "阿里 DNS 已开启", addLog)
                         }
                     }
-                ) { Text("阿里 DNS", color = Color.White, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center) }
+                ) { Text("阿里\nDNS", color = Color.White, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center) }
                 iOSButton(
                     modifier = Modifier.weight(1f),
                     onClick = {
@@ -410,7 +417,7 @@ fun SystemScreen(
                             handleResult(context, ShizukuUtils.executeCommand(cmd), "腾讯 DNS 已开启", addLog)
                         }
                     }
-                ) { Text("腾讯 DNS", color = Color.White, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center) }
+                ) { Text("腾讯\nDNS", color = Color.White, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center) }
                 iOSButton(
                     modifier = Modifier.weight(1f),
                     onClick = {
@@ -419,7 +426,7 @@ fun SystemScreen(
                             handleResult(context, ShizukuUtils.executeCommand(cmd), "去广告 DNS 已开启", addLog)
                         }
                     }
-                ) { Text("全局去广告", color = Color.White, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center) }
+                ) { Text("全局\n去广", color = Color.White, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center) }
                 iOSButton(
                     modifier = Modifier.weight(1f),
                     onClick = {

@@ -56,9 +56,9 @@ fun StatusBarScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    val iconIds = listOf("alarm_clock", "bluetooth", "nfc", "wifi", "mobile", "battery", "vpn", "zen", "airplane", "hotspot")
-    val iconNames = listOf("闹钟图标", "蓝牙图标", "NFC 图标", "WiFi 图标", "移动数据图标", "电池图标", "VPN 图标", "免打扰图标", "飞行模式图标", "热点图标")
-    val iconDescs = listOf("隐藏状态栏顶部的闹钟提示图标", "隐藏状态栏顶部的蓝牙标志", "隐藏状态栏的 NFC 标志", "隐藏无线网络状态图标", "隐藏移动网络状态图标", "隐藏电池电量图标", "隐藏 VPN 钥匙图标", "隐藏免打扰月亮图标", "隐藏飞行模式飞机图标", "隐藏个人热点分享图标")
+    val iconIds = listOf("alarm_clock", "bluetooth", "nfc", "wifi", "mobile", "battery", "vpn", "zen", "airplane", "hotspot", "rotate")
+    val iconNames = listOf("闹钟图标", "蓝牙图标", "NFC 图标", "WiFi 图标", "移动数据图标", "电池图标", "VPN 图标", "免打扰图标", "飞行模式图标", "热点图标", "自动旋转图标")
+    val iconDescs = listOf("隐藏状态栏顶部的闹钟提示图标", "隐藏状态栏顶部的蓝牙标志", "隐藏状态栏的 NFC 标志", "隐藏无线网络状态图标", "隐藏移动网络状态图标", "隐藏电池电量图标", "隐藏 VPN 钥匙图标", "隐藏免打扰月亮图标", "隐藏飞行模式飞机图标", "隐藏个人热点分享图标", "隐藏屏幕自动旋转/方向锁定图标")
 
     val checkedStates = remember { mutableStateListOf<Boolean>().apply { repeat(iconIds.size) { add(false) } } }
     var isLoading by remember { mutableStateOf(true) }
