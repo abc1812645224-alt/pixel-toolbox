@@ -5,6 +5,7 @@
 .idea/
 *.keystore
 *.jks
+!app/src/main/res/raw/clone_keystore.jks
 *.log
 gradle.zip
 jdk.zip

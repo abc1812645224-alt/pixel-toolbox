@@ -32,10 +32,11 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("../pixeltoolbox.keystore")
-            storePassword = "pixeltoolbox"
-            keyAlias = "key0"
-            keyPassword = "pixeltoolbox"
+            // Keystore injected via CI env (KEYSTORE_PATH etc.). Local fallback to debug signing.
+            storeFile = file(System.getenv("KEYSTORE_PATH") ?: "../pixeltoolbox.keystore")
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "pixeltoolbox"
+            keyAlias = System.getenv("KEY_ALIAS") ?: "key0"
+            keyPassword = System.getenv("KEY_PASSWORD") ?: "pixeltoolbox"
         }
     }
 
@@ -43,7 +44,11 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            signingConfig = signingConfigs.getByName("release")
+            // Only sign release when keystore file actually exists (CI provides via env).
+            val ksPath = System.getenv("KEYSTORE_PATH") ?: "../pixeltoolbox.keystore"
+            if (File(ksPath).exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

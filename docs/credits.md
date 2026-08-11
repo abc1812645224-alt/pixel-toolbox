@@ -1,13 +1,3 @@
----
-AIGC:
-    Label: "1"
-    ContentProducer: 001191440300708461136T1XGW3
-    ProduceID: 7ba41e180fa899f78ca0c00ccbc237ba_4d1a75c0957411f1b6b5525400287e28
-    ReservedCode1: r2JBU3xtdzkZgbluI/tWemHCOadafpxtNJ+FMLYWxcgSeEyIH3vInuTvrzYssCnTHQRqZUypFT+x/fEi0N6geP8tth2lje1BlKS15y4SurYxq34/RTo1p9+n7xj80zBTWw7TGXdXWKk9xJkPeKLeVel8hFH9J546HnoJs3NKAjtIzPis3ICwwe1WBAc=
-    ContentPropagator: 001191440300708461136T1XGW3
-    PropagateID: 7ba41e180fa899f78ca0c00ccbc237ba_4d1a75c0957411f1b6b5525400287e28
-    ReservedCode2: r2JBU3xtdzkZgbluI/tWemHCOadafpxtNJ+FMLYWxcgSeEyIH3vInuTvrzYssCnTHQRqZUypFT+x/fEi0N6geP8tth2lje1BlKS15y4SurYxq34/RTo1p9+n7xj80zBTWw7TGXdXWKk9xJkPeKLeVel8hFH9J546HnoJs3NKAjtIzPis3ICwwe1WBAc=
----
 
 # 致谢与参考项目
 
@@ -43,4 +33,7 @@ AIGC:
 - 其中 **ShizuCallRecorder** 遵循 **GPL-3.0**，因其为直接参考的通话录音核心实现来源，本项目整体以 GPL-3.0 开源以保持兼容。
 
 再次感谢以上所有项目及其作者的开源奉献。
-*（内容由AI生成，仅供参考）*
+
+## 素材与资源
+- `app/src/main/assets/earth_texture.jpg`：GPS 测试页卫星地球 3D 视图贴图素材，版权归原作者所有，仅用于应用内功能展示。
+- `app/src/main/res/drawable/donate_qr.jpg`、`wechat_donate.jpg`：开发者收款码，版权归开发者所有。

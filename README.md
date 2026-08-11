@@ -1,13 +1,3 @@
----
-AIGC:
-    Label: "1"
-    ContentProducer: 001191440300708461136T1XGW3
-    ProduceID: 7ba41e180fa899f78ca0c00ccbc237ba_4bdd68b3957411f1b6b5525400287e28
-    ReservedCode1: wHQz4gH3P1UrScDCCIXBVzrpCZvOx1+q6vASC71I1quuSr2YWH87r+eszMNdrXtPt6xcj8eB/JBnf6z278PifGIOwK1jHi+cw+YBQM/VC8sXu6o4A9l8VdiSMAg0/TYZVk49ZnpnDv03jCu+e1U3zWOU7qyynbFMdQ43wKj+Rqmh1whFM1/++2+MpbE=
-    ContentPropagator: 001191440300708461136T1XGW3
-    PropagateID: 7ba41e180fa899f78ca0c00ccbc237ba_4bdd68b3957411f1b6b5525400287e28
-    ReservedCode2: wHQz4gH3P1UrScDCCIXBVzrpCZvOx1+q6vASC71I1quuSr2YWH87r+eszMNdrXtPt6xcj8eB/JBnf6z278PifGIOwK1jHi+cw+YBQM/VC8sXu6o4A9l8VdiSMAg0/TYZVk49ZnpnDv03jCu+e1U3zWOU7qyynbFMdQ43wKj+Rqmh1whFM1/++2+MpbE=
----
 
 # 像素工具箱（Pixel Toolbox）
 
