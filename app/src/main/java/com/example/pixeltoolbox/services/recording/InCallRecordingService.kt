@@ -1,4 +1,12 @@
 /*
+ * ShizuCallRecorder: FOSS Call recording powered through ADB/Shizuku!
+ *  Copyright (C) 2026-present kitsumed (Med)
+ *  This software is licensed under the GNU General Public License v3 or later, with additional terms as permitted under Section 7.
+ *  The full license text is available in the LICENSE file at the root of this project.
+ *  This software is distributed WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ */
+
+/*
  * Ported from ShizuCallRecorder (GPL-3.0) - minimal InCallService call detection.
  * Listens for onCallAdded / STATE_ACTIVE to trigger automatic recording and onCallRemoved to stop.
  *

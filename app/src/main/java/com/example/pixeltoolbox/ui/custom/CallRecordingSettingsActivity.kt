@@ -1,4 +1,12 @@
 /*
+ * ShizuCallRecorder: FOSS Call recording powered through ADB/Shizuku!
+ *  Copyright (C) 2026-present kitsumed (Med)
+ *  This software is licensed under the GNU General Public License v3 or later, with additional terms as permitted under Section 7.
+ *  The full license text is available in the LICENSE file at the root of this project.
+ *  This software is distributed WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ */
+
+/*
  * pixel-toolbox - Call Recording Settings (secondary page).
  * Provides curated settings for the ShizuCallRecorder-ported recording pipeline:
  * audio codec, bit rate, anonymous-call filter and a configurable storage location.

@@ -1,27 +1,92 @@
+---
+AIGC:
+    Label: "1"
+    ContentProducer: 001191440300708461136T1XGW3
+    ProduceID: 7ba41e180fa899f78ca0c00ccbc237ba_4bdd68b3957411f1b6b5525400287e28
+    ReservedCode1: wHQz4gH3P1UrScDCCIXBVzrpCZvOx1+q6vASC71I1quuSr2YWH87r+eszMNdrXtPt6xcj8eB/JBnf6z278PifGIOwK1jHi+cw+YBQM/VC8sXu6o4A9l8VdiSMAg0/TYZVk49ZnpnDv03jCu+e1U3zWOU7qyynbFMdQ43wKj+Rqmh1whFM1/++2+MpbE=
+    ContentPropagator: 001191440300708461136T1XGW3
+    PropagateID: 7ba41e180fa899f78ca0c00ccbc237ba_4bdd68b3957411f1b6b5525400287e28
+    ReservedCode2: wHQz4gH3P1UrScDCCIXBVzrpCZvOx1+q6vASC71I1quuSr2YWH87r+eszMNdrXtPt6xcj8eB/JBnf6z278PifGIOwK1jHi+cw+YBQM/VC8sXu6o4A9l8VdiSMAg0/TYZVk49ZnpnDv03jCu+e1U3zWOU7qyynbFMdQ43wKj+Rqmh1whFM1/++2+MpbE=
+---
+
 # 像素工具箱（Pixel Toolbox）
 
 这是一款专为 Google Pixel 系列手机设计的 **免 Root** 优化工具箱。它基于 [Shizuku](https://shizuku.rikka.app/) 获取系统权限，安全可靠，并支持动态编译。
 
-## 功能列表（详细说明）
+## 功能列表
 
-1. **Wi‑Fi 感叹号（Captive Portal）修复**
-   - 一键将 Wi‑Fi 验证服务器切换为国内可用的 MIUI 服务器，解决连接 Wi‑Fi 后仍显示“网络无法连接”或出现感叹号的问题。
-2. **时区与时间同步修复**
-   - 强制系统时区为 `亚洲/上海`，并将 NTP 时间服务器更换为阿里云 `ntp.aliyun.com`，解决系统时间慢或不准确的问题。
-3. **气密性检测（防水检测）**
-   - 调用原生气压传感器实时监测气压变化，通过屏幕按压测试手机是否进水，帮助用户判断手机防水状态。
-4. **一键开启 5G / VoLTE**
-   - 通过底层属性注入和系统设置修改，强制开启国内四大运营商的 5G 与 VoLTE/VoWiFi 功能，提升网络体验。
+### 网络与信号
+
+1. **5G / VoLTE / VoWiFi 一键开启（IMS 底层注入）**
+   - 通过底层属性注入和系统设置修改，强制开启 VoLTE 高清通话、解锁 APN、显示 IMS 状态；支持 VoWiFi（WiFi 通话 + 强制漫游优先开启）。
+2. **5G NR（SA + NSA）与 VoNR**
+   - 独立 5G 组网 / 非组网切换，VoNR 5G 语音、跨 SIM 通话。
+3. **5G 信号显示优化**
+   - 5G+ / 5GA 图标、信号阈值增强。
+4. **载波聚合（CA）检测与注入**
+   - 实时查看 PCC / SCC 频段、带宽、PCI、ARFCN 与 RSRP / SINR / RSRQ / RSSI 等参数。
+5. **信号监测仪表盘**
+   - 实时展示信号强度、签约上下行速率、QCI、CPU / 内存占用、设备信息。
+6. **Wi‑Fi 感叹号（Captive Portal）修复**
+   - 一键将 Wi‑Fi 验证服务器切换为国内可用的 MIUI / 华为 / Vivo / 阿里云等节点，内置多节点测速，解决连接 Wi‑Fi 后仍显示"网络无法连接"或出现感叹号的问题。
+7. **DNS 网络加密加速**
+   - 一键防 DNS 劫持，支持阿里 DNS、腾讯 DNS、全局去广告 DNS，加速域名解析。
+8. **网络设置一键还原**
+   - 还原所有网络设置（清除 settings 残留、还原 WiFi、重置无线）。
+
+### 通话与系统
+
+9. **Shizuku 通话录音**
+   - 基于 Shizuku 的来电 / 去电自动录音，支持 Opus / AAC 编码、码率调节、音频源选择、忽略匿名来电、自定义保存目录。
+10. **时区与时间同步修复**
+    - 强制系统时区为 `亚洲/上海`，并将 NTP 时间服务器更换为阿里云 `ntp.aliyun.com`，解决系统时间慢或不准确的问题，有助于抢票等对毫秒级时间敏感的场景。
+11. **CPU & 系统性能调度模式**
+    - 一键切换省电 / 均衡 / 性能模式，使用系统电源管理指令（saver / balanced / performance）。
+12. **Pixel 触觉震动强度调校**
+    - 调整打字、触摸与通知的系统级触感震动百分比（关闭 / 柔和 / 标准 / 强劲）。
+13. **强力保活服务**
+    - 后台定期唤醒目标应用（如微信），防止消息延迟，支持自定义目标与间隔。
+
+### 极客工具箱
+
+14. **气密性检测（防水检测）**
+    - 调用原生气压传感器实时监测气压变化，通过屏幕按压测试手机是否进水，帮助用户判断手机防水状态。
+15. **GPS 测试**
+    - 实时查看卫星分布（GPS / 北斗 / 格洛纳斯 / 伽利略 / 准天顶）、信号强度与定位数据，附卫星地球 3D 视图。
+16. **应用分身**
+    - 为应用创建独立分身实例，与主应用数据完全隔离（仅供学习研究使用）。
+17. **极客冰箱**
+    - 底层冻结（disable-user）闲置应用，实现零后台电量与内存占用。
+18. **自启管理**
+    - 禁用第三方应用的开机自启广播与后台运行，减少开机内存占用。
+19. **状态栏净化（高级控制）**
+    - 自由选择并隐藏闹钟、蓝牙、WiFi、电量、VPN 等状态栏系统图标。
+20. **游戏模式**
+    - 一键开启高性能电源、关闭动画、清理后台与缓存、触控优化，提升游戏帧率与响应速度。
+21. **全局刷新率强制锁定**
+    - 强制锁定屏幕刷新率（60 / 90 / 120Hz），解决部分场景卡顿掉帧。
+22. **充电提速与电池状态检查**
+    - 管理底层充电节点，强制限制或恢复充电以保护电池；查看电量、健康度、温度、电压、电流、循环次数等状态。
+23. **突破限制降级安装器**
+    - 绕过 SDK 版本与签名限制，支持强行降级安装目标应用。
+24. **已安装应用 APK 一键提取器**
+    - 快速提取并导出手机内任意应用的安装包（APK）到 Download 目录。
+25. **暴力清理**
+    - 一键清理后台非系统进程与应用缓存。
+26. **极客终端**
+    - 内置 Shizuku 权限的 Shell 终端，可自由执行系统命令。
+27. **双击桌面锁屏**
+    - 创建桌面快捷方式或一键安装纯净锁屏桌面，实现双击桌面锁屏。
 
 ## 编译方法（通过 GitHub Actions）
 
 本项目支持在 GitHub 云端直接编译，无需在本地安装 Android Studio：
 
-1. 将代码库推送到您的 GitHub 仓库。 
-2. 进入仓库的 **Actions** 页面。 
-3. 选择 **Android Build CI**，点击右侧的 **Run workflow**。 
-4. 编译完成后（约 1‑2 分钟），打开运行详情页。 
-5. 在 **Artifacts** 区域下载 `app-release` 压缩包。 
+1. 将代码库推送到您的 GitHub 仓库。
+2. 进入仓库的 **Actions** 页面。
+3. 选择 **Android Build CI**，点击右侧的 **Run workflow**。
+4. 编译完成后（约 1‑2 分钟），打开运行详情页。
+5. 在 **Artifacts** 区域下载 `app-release` 压缩包。
 6. 解压后将 APK 安装到手机。
 
 ## 依赖与准备
@@ -31,10 +96,36 @@
 ## 致谢与参考项目
 
 本项目在开发过程中参考并借鉴了以下开源项目及其作者的实现：
-- **Shizuku** – 由 Rikka Apps 提供的系统权限桥接工具。
-- **AndResGuard** – 360 开源的资源混淆与压缩方案。
-- 其他社区贡献的脚本与工具（详见 `docs/credits.md`）。
+
+- **ShizuCallRecorder**（kitsumed，GPL-3.0）– 通话录音核心实现思路
+- **scrcpy**（Genymobile，Apache-2.0）– 通话录音音频源 / 编码参考
+- **Shizuku**（Rikka Apps，Apache-2.0）– 系统权限桥接方案
+- **AndResGuard**（360 / shwenzhang，Apache-2.0）– 资源混淆与压缩
+- **AndroidHiddenApiBypass**（LSPosed，Apache-2.0）– 隐藏 API 绕过
+- **ARSCLib**（REAndroid，Apache-2.0）– Android 二进制资源读写
+- **carrier-ims**（ryfineZ，Apache-2.0）– Pixel 5G / VoLTE / VoWiFi 优化核心实现思路
+
+完整致谢清单详见 [`docs/credits.md`](docs/credits.md)。
 
 ## 许可证
 
 本项目遵循 **GPL‑3.0** 许可证，完整的许可证文本位于项目根目录的 `LICENSE` 文件中。使用、修改、分发本项目代码时必须遵守 GPL‑3.0 的条款。
+
+### 组件许可证说明
+
+- 本项目自身遵循 **GPL-3.0**（"3.0 协议"）。
+- 引用的开源组件大多遵循 **Apache License 2.0**（"2.0 协议"），允许自由使用、修改与分发，需保留版权声明。
+- 其中 **ShizuCallRecorder** 遵循 **GPL-3.0**，因其为直接参考的通话录音核心实现来源，本项目整体以 GPL-3.0 开源以保持兼容。
+- 各组件版权归其原作者所有，详细声明见 `docs/credits.md`。
+
+## 商标声明
+
+Pixel 是 Google LLC 的商标。本应用与 Google LLC 无关，非 Google 官方产品，Google 不对本应用的功能与质量承担任何责任。
+
+## 隐私说明
+
+- 本应用的全部功能均在设备本地完成，**不会上传**任何通话录音、短信内容、应用列表或个人信息到服务器。
+- 通话录音文件默认保存在设备本地存储（Download 目录或用户自选目录），请妥善保管，并在遵守当地法律法规的前提下使用。
+- 短信读取权限仅用于识别运营商流量短信中的流量数值（需用户手动授权），短信内容不会离开设备。
+- 应用崩溃时可能在本机生成崩溃日志文件，仅用于本地排查问题，不会自动上传。
+*（内容由AI生成，仅供参考）*
