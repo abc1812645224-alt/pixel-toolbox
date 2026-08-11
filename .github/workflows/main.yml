@@ -28,11 +28,13 @@ jobs:
         echo "KEY_ALIAS=key0" >> $GITHUB_ENV
         echo "KEY_PASSWORD=pixeltoolbox" >> $GITHUB_ENV
 
-    - name: Build with Gradle
+    - name: Set up Gradle
       uses: gradle/actions/setup-gradle@v4
       with:
         gradle-version: 8.10.2
-        arguments: assembleRelease
+
+    - name: Build with Gradle
+      run: ./gradlew assembleRelease
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
