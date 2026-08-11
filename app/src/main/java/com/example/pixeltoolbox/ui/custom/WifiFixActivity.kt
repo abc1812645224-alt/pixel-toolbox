@@ -245,38 +245,45 @@ fun WifiFixScreen(
                         isApplying = true
                         coroutineScope.launch {
                             val urlStr = serverUrls[selectedIndex]
-                            var host = urlStr.replace("http://", "").replace("https://", "")
-                            val slashIdx = host.indexOf('/')
-                            if (slashIdx >= 0) {
-                                host = host.substring(0, slashIdx)
+                            val useHttps = urlStr.startsWith("https://")
+
+                            val cmds = mutableListOf<String>()
+                            // 1. 清理旧配置，避免残留值干扰探测
+                            cmds += "settings delete global captive_portal_mode"
+                            cmds += "settings delete global captive_portal_server"
+                            cmds += "settings delete global captive_portal_use_https"
+                            cmds += "settings delete global captive_portal_detection_enabled"
+                            cmds += "settings delete global captive_portal_http_url"
+                            cmds += "settings delete global captive_portal_https_url"
+                            // 2. 写入新配置
+                            cmds += "settings put global captive_portal_mode 1"
+                            cmds += "settings put global captive_portal_http_url $urlStr"
+                            // 关键：captive_portal_use_https 必须与所选服务器协议一致。
+                            // 若服务器是 http:// 而 use_https=1，系统会把它当 HTTPS 探测发起 SSL 握手，必然失败，感叹号无法消除。
+                            if (useHttps) {
+                                cmds += "settings put global captive_portal_use_https 1"
+                                cmds += "settings put global captive_portal_https_url $urlStr"
+                            } else {
+                                cmds += "settings put global captive_portal_use_https 0"
+                                cmds += "settings delete global captive_portal_https_url"
                             }
+                            // 3. 触发 NetworkMonitor 重新探测
+                            cmds += "svc wifi disable"
+                            cmds += "sleep 2"
+                            cmds += "svc wifi enable"
 
-                            val cmds = listOf(
-                                "settings delete global captive_portal_mode",
-                                "settings delete global captive_portal_server",
-                                "settings delete global captive_portal_use_https",
-                                "settings delete global captive_portal_detection_enabled",
-                                "settings delete global captive_portal_http_url",
-                                "settings delete global captive_portal_https_url",
-                                "settings put global captive_portal_detection_enabled 1",
-                                "settings put global captive_portal_mode 1",
-                                "settings put global captive_portal_use_https 1",
-                                "settings put global captive_portal_server $host",
-                                "settings put global captive_portal_http_url $urlStr",
-                                "settings put global captive_portal_https_url $urlStr",
-                                "svc wifi disable",
-                                "sleep 1",
-                                "svc wifi enable"
-                            )
-
-                            withContext(Dispatchers.IO) {
-                                for (cmd in cmds) {
-                                    ShizukuUtils.executeCommand(cmd)
-                                }
+                            val results = withContext(Dispatchers.IO) {
+                                cmds.map { cmd -> ShizukuUtils.executeCommand(cmd) }
                             }
                             isApplying = false
-                            Toast.makeText(context, "去除 WiFi 感叹号成功，网络已重新连通！", Toast.LENGTH_SHORT).show()
-                            onBack()
+                            val failures = results.filter { it.isFailure }
+                            if (failures.isEmpty()) {
+                                Toast.makeText(context, "去除 WiFi 感叹号成功，网络已重新连通！", Toast.LENGTH_SHORT).show()
+                                onBack()
+                            } else {
+                                val errs = failures.mapNotNull { it.exceptionOrNull()?.message }.joinToString("；")
+                                Toast.makeText(context, "部分命令执行失败：$errs（请确认 Shizuku 已授权）", Toast.LENGTH_LONG).show()
+                            }
                         }
                     },
                     modifier = Modifier.weight(1f).height(50.dp)
