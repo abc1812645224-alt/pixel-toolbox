@@ -1,0 +1,109 @@
+
+> Configure project :app
+WARNING: The option setting 'android.overridePathCheck=true' is experimental.
+The current default is 'false'.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :app:mergeReleaseNativeLibs NO-SOURCE
+> Task :app:stripReleaseDebugSymbols NO-SOURCE
+> Task :app:extractReleaseNativeSymbolTables NO-SOURCE
+> Task :app:mergeReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:checkReleaseDuplicateClasses UP-TO-DATE
+> Task :app:mergeReleaseArtProfile UP-TO-DATE
+> Task :app:buildKotlinToolingMetadata UP-TO-DATE
+> Task :stub:preBuild UP-TO-DATE
+> Task :stub:preReleaseBuild UP-TO-DATE
+> Task :stub:compileReleaseAidl UP-TO-DATE
+> Task :app:compileReleaseAidl UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:generateReleaseBuildConfig UP-TO-DATE
+> Task :app:checkReleaseAarMetadata UP-TO-DATE
+> Task :app:generateReleaseResValues UP-TO-DATE
+> Task :app:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :app:generateReleaseResources UP-TO-DATE
+> Task :app:mergeReleaseResources UP-TO-DATE
+> Task :app:packageReleaseResources UP-TO-DATE
+> Task :app:parseReleaseLocalResources UP-TO-DATE
+> Task :app:createReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+> Task :app:processReleaseMainManifest UP-TO-DATE
+> Task :app:processReleaseManifest
+> Task :app:processReleaseManifestForPackage UP-TO-DATE
+> Task :stub:generateReleaseResValues UP-TO-DATE
+> Task :stub:generateReleaseResources UP-TO-DATE
+> Task :stub:packageReleaseResources UP-TO-DATE
+> Task :stub:parseReleaseLocalResources UP-TO-DATE
+> Task :stub:processReleaseManifest UP-TO-DATE
+> Task :stub:generateReleaseRFile UP-TO-DATE
+> Task :stub:javaPreCompileRelease UP-TO-DATE
+> Task :stub:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :stub:bundleLibCompileToJarRelease UP-TO-DATE
+> Task :app:javaPreCompileRelease UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:mergeReleaseShaders UP-TO-DATE
+> Task :app:compileReleaseShaders NO-SOURCE
+> Task :app:generateReleaseAssets UP-TO-DATE
+> Task :app:mergeReleaseAssets UP-TO-DATE
+> Task :app:compressReleaseAssets UP-TO-DATE
+> Task :app:processApplicationManifestReleaseForBundle
+> Task :app:collectReleaseDependencies UP-TO-DATE
+> Task :app:sdkReleaseDependencyData UP-TO-DATE
+> Task :app:writeReleaseAppMetadata UP-TO-DATE
+> Task :app:writeReleaseSigningConfigVersions UP-TO-DATE
+> Task :stub:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :stub:mergeReleaseNativeLibs NO-SOURCE
+> Task :stub:stripReleaseDebugSymbols NO-SOURCE
+> Task :stub:copyReleaseJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :stub:extractDeepLinksForAarRelease UP-TO-DATE
+> Task :stub:extractReleaseAnnotations UP-TO-DATE
+> Task :stub:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :stub:mergeReleaseConsumerProguardFiles UP-TO-DATE
+> Task :stub:mergeReleaseShaders UP-TO-DATE
+> Task :stub:compileReleaseShaders NO-SOURCE
+> Task :stub:generateReleaseAssets UP-TO-DATE
+> Task :stub:packageReleaseAssets UP-TO-DATE
+> Task :stub:prepareLintJarForPublish UP-TO-DATE
+> Task :stub:prepareReleaseArtProfile UP-TO-DATE
+> Task :stub:processReleaseJavaRes NO-SOURCE
+> Task :stub:mergeReleaseJavaResource UP-TO-DATE
+> Task :stub:syncReleaseLibJars UP-TO-DATE
+> Task :stub:writeReleaseAarMetadata UP-TO-DATE
+> Task :stub:bundleReleaseAar UP-TO-DATE
+> Task :stub:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :stub:mergeReleaseResources UP-TO-DATE
+> Task :stub:verifyReleaseResources UP-TO-DATE
+> Task :stub:assembleRelease UP-TO-DATE
+> Task :app:processReleaseResources
+> Task :app:bundleReleaseResources UP-TO-DATE
+> Task :app:kaptGenerateStubsReleaseKotlin
+> Task :app:kaptReleaseKotlin UP-TO-DATE
+
+> Task :app:compileReleaseKotlin
+w: file:///D:/Zhuo%20Mian/pixel-toolbox/app/src/main/java/com/example/pixeltoolbox/ui/custom/StatusBarActivity.kt:118:48 Parameter 'id' is never used, could be renamed to _
+
+> Task :app:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :app:hiltAggregateDepsRelease UP-TO-DATE
+> Task :app:hiltJavaCompileRelease UP-TO-DATE
+> Task :app:processReleaseJavaRes UP-TO-DATE
+> Task :app:mergeReleaseJavaResource UP-TO-DATE
+> Task :app:transformReleaseClassesWithAsm
+> Task :app:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :app:expandReleaseArtProfileWildcards
+> Task :app:minifyReleaseWithR8
+> Task :app:compileReleaseArtProfile
+> Task :app:shrinkReleaseRes
+> Task :app:optimizeReleaseResources
+> Task :app:packageRelease
+> Task :app:createReleaseApkListingFileRedirect
+> Task :app:assembleRelease
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 1m 9s
+73 actionable tasks: 15 executed, 58 up-to-date
