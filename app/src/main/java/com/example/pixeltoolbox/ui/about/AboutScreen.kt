@@ -322,6 +322,13 @@ fun AboutScreen() {
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
+                        "项目开源地址：github.com/abc1812645224-alt/pixel-toolbox",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = iOSBlue
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
                         "本项目已在 GitHub 上开源（GPL-3.0）。引用的开源组件大多遵循 Apache License 2.0，可自由使用、修改与分发，需保留版权声明；其中 ShizuCallRecorder 遵循 GPL-3.0，因其为直接参考的通话录音核心实现来源，本项目整体以 GPL-3.0 开源以保持兼容。完整致谢与许可说明见仓库 docs/credits.md。",
                         style = MaterialTheme.typography.bodyMedium,
                         color = iOSSecondaryLabel

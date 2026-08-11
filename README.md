@@ -3,6 +3,8 @@
 
 这是一款专为 Google Pixel 系列手机设计的 **免 Root** 优化工具箱。它基于 [Shizuku](https://shizuku.rikka.app/) 获取系统权限，安全可靠，并支持动态编译。
 
+> 开源地址：<https://github.com/abc1812645224-alt/pixel-toolbox>
+
 ## 功能列表
 
 ### 网络与信号
