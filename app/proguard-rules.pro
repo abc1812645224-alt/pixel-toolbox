@@ -57,6 +57,9 @@
 -keep class com.reandroid.** { *; }
 -keep class com.android.apksig.** { *; }
 
+# ========== BouncyCastle（AppClone BKS keystore 签名依赖）==========
+-keep class org.bouncycastle.** { *; }
+
 # ========== 通用保底 ==========
 -keep class com.example.pixeltoolbox.** { *; }
 
