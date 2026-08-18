@@ -3,6 +3,7 @@ name: Android Build CI
 on:
   push:
     branches: [ "main", "master" ]
+    tags: [ "v*" ]
   workflow_dispatch:
 
 permissions:
@@ -42,15 +43,21 @@ jobs:
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: app-release
-        path: app/build/outputs/apk/release/app-release.apk
-        if-no-files-found: error
+        name: 像素工具箱-Shizuku版-v1.1.6
+        path: app/build/outputs/apk/release/*.apk
+        if-no-files-found: warn
 
     - name: Publish Release
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: latest
-        name: Latest Build
-        files: app/build/outputs/apk/release/app-release.apk
+        tag_name: v1.1.6
+        name: 像素工具箱 (Shizuku版) v1.1.6
+        body: |
+          ## 像素工具箱 (Shizuku版) v1.1.6
+          - 区分 Shizuku 版本应用名称与系统标识 (`像素工具箱 (Shizuku版)`)
+          - 统一推送服务无感静默托管（自动授予通知栏权限、隐藏桌面图标）
+          - 重构统一推送服务控制台 UI 风格
+          - 补充关于页面开源致谢 (Trumeet / MiPushFramework)
+        files: app/build/outputs/apk/release/*.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
