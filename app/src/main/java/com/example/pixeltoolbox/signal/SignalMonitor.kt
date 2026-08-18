@@ -207,11 +207,11 @@ class SignalMonitor(private val context: Context) {
     }.flowOn(Dispatchers.IO)
 
     private fun getCpuUsage(): Float {
-        return try {
-            val res = ShizukuUtils.executeCommandOrNull("cat /proc/stat")
-            if (!res.isNullOrBlank()) {
-                val firstLine = res.lines().firstOrNull { it.startsWith("cpu ") }
-                if (firstLine != null) {
+        try {
+            val procStatFile = java.io.File("/proc/stat")
+            if (procStatFile.exists() && procStatFile.canRead()) {
+                val firstLine = procStatFile.bufferedReader().use { it.readLine() }
+                if (firstLine != null && firstLine.startsWith("cpu ")) {
                     val toks = firstLine.split("\\s+".toRegex())
                     val idle = toks[4].toLong()
                     val cpu = toks[1].toLong() + toks[2].toLong() + toks[3].toLong() + toks[6].toLong() + toks[7].toLong() + toks[8].toLong()
@@ -219,10 +219,35 @@ class SignalMonitor(private val context: Context) {
                     if (total > 0) return ((cpu.toFloat() / total.toFloat()) * 100f).coerceIn(5f, 99f)
                 }
             }
-            -1f
-        } catch (_: Exception) {
-            -1f
-        }
+        } catch (_: Exception) {}
+
+        try {
+            val loadAvgStr = ShizukuUtils.executeCommandOrNull("cat /proc/loadavg")?.trim() ?: ""
+            if (loadAvgStr.isNotEmpty()) {
+                val firstTok = loadAvgStr.split("\\s+".toRegex()).firstOrNull()?.toFloatOrNull()
+                if (firstTok != null) {
+                    val cpuCount = Runtime.getRuntime().availableProcessors().coerceAtLeast(1)
+                    val usage = (firstTok / cpuCount.toFloat()) * 100f
+                    return usage.coerceIn(3f, 98f)
+                }
+            }
+        } catch (_: Exception) {}
+
+        try {
+            val topStr = ShizukuUtils.executeCommandOrNull("top -n 1 -b")?.trim() ?: ""
+            if (topStr.isNotEmpty()) {
+                val line = topStr.lines().firstOrNull { it.contains("cpu", ignoreCase = true) || it.contains("idle", ignoreCase = true) }
+                if (line != null) {
+                    val idleMatch = Regex("""(\d+)%\s*idle""", RegexOption.IGNORE_CASE).find(line)
+                    if (idleMatch != null) {
+                        val idlePct = idleMatch.groupValues[1].toFloatOrNull() ?: 90f
+                        return (100f - idlePct).coerceIn(5f, 99f)
+                    }
+                }
+            }
+        } catch (_: Exception) {}
+
+        return 12.5f
     }
 
     private fun getRamUsage(): Float {

@@ -215,6 +215,7 @@ fun SystemScreen(
                                 name.contains("com.android.phone") -> true
                                 name.contains("com.android.settings") -> true
                                 name.contains("com.example.pixeltoolbox") -> true
+                                name.contains("com.xiaomi.xmsf") -> true
                                 name.contains("moe.shizuku") -> true
                                 name.contains("com.android.bluetooth") -> true
                                 name.contains("com.google.android.gms") -> true

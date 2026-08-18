@@ -210,7 +210,7 @@ fun AboutScreen() {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    "像素工具箱",
+                    "像素工具箱 (Shizuku版)",
                     style = MaterialTheme.typography.headlineMedium,
                     color = iOSLabel
                 )
@@ -283,6 +283,10 @@ fun AboutScreen() {
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     AcknowledgementItem("ryfineZ", "carrier-ims", "github.com/ryfineZ/carrier-ims-for-pixel", "特别致谢 ryfineZ 的开源 carrier-ims 项目，为本工具提供了 Pixel 5G/VoLTE 蜂窝网络全特性优化的核心实现思路")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Divider(color = iOSSeparator, thickness = 0.5.dp)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    AcknowledgementItem("Trumeet", "MiPushFramework (xmsf.apk)", "github.com/Trumeet/MiPushFramework", "特别致谢开发者 Trumeet 及其开源项目 MiPushFramework。本工具集成了 xmsf.apk 底层服务包，实现静默托管推送通道、自动开启通知栏权限与禁用 WelcomeActivity 隐藏桌面图标。向原作者的开源贡献致以诚挚感谢！")
                     Spacer(modifier = Modifier.height(8.dp))
                     Divider(color = iOSSeparator, thickness = 0.5.dp)
                     Spacer(modifier = Modifier.height(8.dp))
@@ -532,7 +536,7 @@ suspend fun installDesktopLauncher(context: Context) {
     withContext(Dispatchers.IO) {
         try {
             withContext(Dispatchers.Main) {
-                android.widget.Toast.makeText(context, "正在安装桌面，请稍候...", android.widget.Toast.LENGTH_SHORT).show()
+                android.widget.Toast.makeText(context, "正在解包并覆盖安装桌面...", android.widget.Toast.LENGTH_SHORT).show()
             }
             val apkName = "pixel_launcher.apk"
             val targetPath = "/data/local/tmp/$apkName"
@@ -543,18 +547,18 @@ suspend fun installDesktopLauncher(context: Context) {
             inStream.copyTo(outStream)
             inStream.close()
             outStream.close()
+
             com.example.pixeltoolbox.shizuku.ShizukuUtils.streamFileTo("cat > $targetPath", outFile)
-            val res = com.example.pixeltoolbox.shizuku.ShizukuUtils.executeCommand("pm install -r $targetPath")
+            val res = com.example.pixeltoolbox.shizuku.ShizukuUtils.executeCommand("pm install -r -d -g $targetPath; am force-stop com.google.android.apps.nexuslauncher 2>/dev/null; rm -f $targetPath")
+            
             if (res.getOrNull()?.contains("Success", ignoreCase = true) == true) {
                 withContext(Dispatchers.Main) {
-                    val intent = Intent(Settings.ACTION_HOME_SETTINGS).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    }
-                    context.startActivity(intent)
+                    android.widget.Toast.makeText(context, "✅ 无搜索框桌面已成功部署并重启生效！", android.widget.Toast.LENGTH_LONG).show()
                 }
             } else {
                 withContext(Dispatchers.Main) {
-                    android.widget.Toast.makeText(context, "安装失败: $res", android.widget.Toast.LENGTH_LONG).show()
+                    val err = res.getOrNull() ?: res.exceptionOrNull()?.message ?: "安装未响应"
+                    android.widget.Toast.makeText(context, "安装结果: $err", android.widget.Toast.LENGTH_LONG).show()
                 }
             }
         } catch (e: Exception) {

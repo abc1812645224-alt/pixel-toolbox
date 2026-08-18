@@ -22,12 +22,19 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -53,10 +60,6 @@ import androidx.compose.material3.MaterialTheme
 @Composable
 fun GeekToolsCard(context: Context, textColor: Color, addLog: (String) -> Unit, onOpenBootManager: () -> Unit = {}) {
     val coroutineScope = rememberCoroutineScope()
-
-    // 电池健康状态
-    var batteryData by remember { mutableStateOf<Map<String, String>?>(null) }
-    var batteryError by remember { mutableStateOf<String?>(null) }
 
     // 安装器弹窗
     var showInstallWarning by remember { mutableStateOf(false) }
@@ -203,6 +206,149 @@ fun GeekToolsCard(context: Context, textColor: Color, addLog: (String) -> Unit, 
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // 5.6 统一推送服务 (系统托管框架)
+            var isPushRunning by remember { mutableStateOf(false) }
+            var isTencentSpoofing by remember { mutableStateOf(false) }
+            var managedPushApps by remember { mutableStateOf<List<com.example.pixeltoolbox.services.push.ManagedPushApp>>(emptyList()) }
+            var showPushDetailDialog by remember { mutableStateOf(false) }
+            var showXmsfMissingNotice by remember { mutableStateOf(false) }
+            var isPushProcessing by remember { mutableStateOf(false) }
+            val isXmsfInstalled = com.example.pixeltoolbox.services.push.UnifiedPushManager.isXmsfInstalled(context)
+
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    isPushRunning = com.example.pixeltoolbox.services.push.UnifiedPushManager.isPushServiceRunning(context)
+                    isTencentSpoofing = com.example.pixeltoolbox.services.push.UnifiedPushManager.isTencentSpoofEnabled(context)
+                    managedPushApps = com.example.pixeltoolbox.services.push.UnifiedPushManager.getManagedApps(context)
+                }
+            }
+
+            SectionTitle("统一推送服务", "无感托管国内应用推送通道，即使冻结 App 也能秒收通知栏消息")
+            iOSButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { showPushDetailDialog = true }
+            ) {
+                AutoSizeText(
+                    text = when {
+                        isPushRunning -> "统一推送托管：运行中 🟢 (点击管理)"
+                        !isXmsfInstalled -> "一键安装统一推送服务并托管"
+                        else -> "开启统一推送服务"
+                    },
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
+            if (showXmsfMissingNotice) {
+                AlertDialog(
+                    onDismissRequest = { showXmsfMissingNotice = false },
+                    title = { Text("统一推送服务说明", fontWeight = FontWeight.Bold) },
+                    text = {
+                        Column {
+                            Text(
+                                "1. 【必备前提】：原生 Pixel (AOSP) 系统默认未内置统一推送服务框架程序。只有手动安装了框架程序后，第三方应用才能向其注册推送通道。\n\n" +
+                                "2. 【Shizuku 权限作用】：在安装了框架的前提下，Shizuku 可通过 ADB Shell 执行 cmd appops 为其赋予 AUTO_START（自启动）与 dumpsys 白名单保活，防止系统杀掉推送进程。\n\n" +
+                                "3. 【微信/QQ 伪装限制】：微信与 QQ 启动时会通过读取 ro.miui.ui.version.name 只读系统属性判断是否运行在特定厂商系统上。标准 ADB Shell 无法修改 ro.* 只读属性（该属性修改需要 Root 权限下的 resetprop 工具或 LSPosed 模块）。",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = textColor
+                            )
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = { showXmsfMissingNotice = false }) {
+                            Text("我已知晓", color = iOSBlue, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                )
+            }
+
+            if (showPushDetailDialog) {
+                AlertDialog(
+                    onDismissRequest = { showPushDetailDialog = false },
+                    title = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("已接管应用", fontWeight = FontWeight.Bold)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = Color(0xFFE8F5E9)
+                            ) {
+                                Text(
+                                    "${managedPushApps.size} 个",
+                                    color = Color(0xFF2E7D32),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                                )
+                            }
+                        }
+                    },
+                    text = {
+                        LazyColumn(
+                            modifier = Modifier.heightIn(max = 350.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            items(managedPushApps) { app ->
+                                Surface(
+                                    shape = RoundedCornerShape(10.dp),
+                                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        if (app.iconBitmap != null) {
+                                            Image(
+                                                bitmap = app.iconBitmap.asImageBitmap(),
+                                                contentDescription = app.appName,
+                                                modifier = Modifier
+                                                    .size(36.dp)
+                                                    .clip(RoundedCornerShape(8.dp))
+                                            )
+                                        } else {
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(36.dp)
+                                                    .clip(RoundedCornerShape(8.dp))
+                                                    .background(iOSSecondaryLabel.copy(alpha = 0.2f)),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                Text("App", style = MaterialTheme.typography.labelSmall, color = iOSSecondaryLabel)
+                                            }
+                                        }
+                                        Spacer(modifier = Modifier.width(10.dp))
+                                        Column(modifier = Modifier.weight(1f)) {
+                                            Text(app.appName, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
+                                            Text(app.packageName, style = MaterialTheme.typography.labelSmall, color = iOSSecondaryLabel)
+                                        }
+                                        Surface(
+                                            shape = RoundedCornerShape(6.dp),
+                                            color = iOSGreen.copy(alpha = 0.15f)
+                                        ) {
+                                            Text(
+                                                "已接管",
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = iOSGreen,
+                                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = { showPushDetailDialog = false }) {
+                            Text("确定", color = iOSBlue)
+                        }
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
             // 6. 去除 WiFi 感叹号
             SectionTitle("去除 WiFi 感叹号", "部署连通正常的 Captive Portal 验证节点，彻底去除 WiFi 小感叹号")
             iOSButton(
@@ -256,7 +402,7 @@ fun GeekToolsCard(context: Context, textColor: Color, addLog: (String) -> Unit, 
 
                             // 3. 杀后台进程（排除自身）
                             val killResult = ShizukuUtils.executeCommand(
-                                "for pkg in \$(pm list packages -3 | sed 's/package://' | grep -v com.example.pixeltoolbox); " +
+                                "for pkg in \$(pm list packages -3 | sed 's/package://' | grep -v com.example.pixeltoolbox | grep -v com.xiaomi.xmsf); " +
                                 "do am force-stop \$pkg; done"
                             )
                             if (killResult.isSuccess) addLog("✅ 后台进程已清理")

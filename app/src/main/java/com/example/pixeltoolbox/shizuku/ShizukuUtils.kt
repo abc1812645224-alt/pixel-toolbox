@@ -18,6 +18,7 @@ package com.example.pixeltoolbox.shizuku
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -81,6 +82,25 @@ object ShizukuUtils {
 
         GlobalScope.launch {
             try {
+                // ---- D 组：基带调优（setprop，ADB Shell 独立开关）----
+                executeCommand("setprop persist.vendor.radio.nr_sa_fast_camp ${if (toggleMap["nr_sa_fast_camp"] == true) "1" else "0"}")
+                executeCommand("setprop persist.vendor.radio.5g_ca_enable ${if (toggleMap["5g_ca_enable"] == true) "1" else "0"}")
+                executeCommand("setprop persist.vendor.radio.dynamic_sar ${if (toggleMap["dynamic_sar"] == true) "0" else "1"}")
+                executeCommand("setprop persist.vendor.radio.smart_data_switch ${if (toggleMap["smart_data_switch"] == true) "1" else "0"}")
+                executeCommand("settings put global vonr_enabled 1")
+
+                if (toggleMap["unlock_network_types"] == true) {
+                    executeCommand("cmd phone set-allowed-network-types-for-users -s 0 11001111101111111111")
+                    executeCommand("cmd phone set-allowed-network-types-for-users -s 1 11001111101111111111")
+                }
+
+                if (toggleMap["net_optimize"] == true) {
+                    executeCommand("sysctl -w net.core.rmem_max=16777216 2>/dev/null")
+                    executeCommand("sysctl -w net.core.wmem_max=16777216 2>/dev/null")
+                    executeCommand("sysctl -w net.ipv4.tcp_fastopen=3 2>/dev/null")
+                    executeCommand("sysctl -w net.ipv4.tcp_slow_start_after_idle=0 2>/dev/null")
+                }
+
                 val bundle = ImsModifier.buildBundle(
                     carrierName = null,
                     countryISO = "cn",
@@ -96,14 +116,16 @@ object ShizukuUtils {
                     enable5GThreshold = toggleMap["5g_signal"] == true,
                     enable5GPlusIcon = toggleMap["5ga_icon"] == true,
                     enableShow4GForLTE = toggleMap["lte_4g"] == true,
-                    show5GA = toggleMap["show_5ga"] == true,
-                    enable5GIconUpgrade = toggleMap["5g_icon_upgrade"] == true,
-                    enableCallRecording = toggleMap["call_recording"]
+                    show5GA = toggleMap["5ga_icon"] == true,
+                    enable5GIconUpgrade = toggleMap["5ga_icon"] == true,
+                    enableCallRecording = null
                 )
                 bundle.putInt(ImsModifier.BUNDLE_SELECT_SIM_ID, subId)
 
                 val msg = ShizukuProviderWrapper.overrideImsConfig(context, bundle)
                 if (msg == null) {
+                    // 注入成功后自动刷新一次飞行模式，触发基带握手
+                    executeCommand("cmd connectivity airplane-mode enable; sleep 1; cmd connectivity airplane-mode disable")
                     onResult(true, "CarrierConfig 注入成功")
                 } else {
                     onResult(false, msg)
@@ -113,6 +135,65 @@ object ShizukuUtils {
                 onResult(false, "写入失败: ${e.javaClass.simpleName}: ${e.message}")
             }
         }
+    }
+
+    /**
+     * 同步读取 CarrierConfig 状态（A/B/C 组）
+     */
+    fun readCarrierConfigStates(context: Context): Map<String, Boolean> {
+        val map = mutableMapOf<String, Boolean>()
+        try {
+            val subId = android.telephony.SubscriptionManager.getDefaultDataSubscriptionId()
+            val result = kotlinx.coroutines.runBlocking {
+                kotlinx.coroutines.withTimeoutOrNull(3000) {
+                    ShizukuProviderWrapper.readCarrierConfig(context, subId)
+                }
+            } ?: return map
+
+            val nrArray = result.getIntArray(android.telephony.CarrierConfigManager.KEY_CARRIER_NR_AVAILABILITIES_INT_ARRAY)
+            map["nr_5g"] = nrArray != null && nrArray.contains(1) && nrArray.contains(2)
+
+            if (Build.VERSION.SDK_INT >= 34) {
+                map["vonr"] = result.getBoolean(android.telephony.CarrierConfigManager.KEY_VONR_ENABLED_BOOL, false)
+            }
+
+            val ssrsrp = result.getIntArray(android.telephony.CarrierConfigManager.KEY_5G_NR_SSRSRP_THRESHOLDS_INT_ARRAY)
+            map["5g_signal"] = ssrsrp != null && ssrsrp.size >= 4
+
+            val nrAdv = result.getInt("nr_advanced_threshold_bandwidth_khz_int", 0)
+            map["5ga_icon"] = nrAdv == 100000
+
+            map["volte"] = result.getBoolean(android.telephony.CarrierConfigManager.KEY_CARRIER_VOLTE_AVAILABLE_BOOL, false)
+            map["vowifi"] = result.getBoolean(android.telephony.CarrierConfigManager.KEY_CARRIER_WFC_IMS_AVAILABLE_BOOL, false)
+            map["vilte"] = result.getBoolean(android.telephony.CarrierConfigManager.KEY_CARRIER_VT_AVAILABLE_BOOL, false)
+            map["lte_4g"] = result.getBoolean("show_4g_for_lte_data_icon_bool", false)
+            map["cross_sim"] = result.getBoolean("carrier_cross_sim_ims_available_bool", false)
+            map["ut"] = result.getBoolean(android.telephony.CarrierConfigManager.KEY_CARRIER_SUPPORTS_SS_OVER_UT_BOOL, false)
+        } catch (_: Exception) {}
+        return map
+    }
+
+    /**
+     * 读取 D 组基带 setprop 状态
+     */
+    fun readNetworkPropStates(): Map<String, Boolean> {
+        val map = mutableMapOf<String, Boolean>()
+        try {
+            val saFast = executeCommandOrNull("getprop persist.vendor.radio.nr_sa_fast_camp")?.trim() == "1"
+            val caEnable = executeCommandOrNull("getprop persist.vendor.radio.5g_ca_enable")?.trim() == "1"
+            val sarOff = executeCommandOrNull("getprop persist.vendor.radio.dynamic_sar")?.trim() == "0"
+            val smartSwitch = executeCommandOrNull("getprop persist.vendor.radio.smart_data_switch")?.trim() == "1"
+            val netOptimize = executeCommandOrNull("cat /proc/sys/net/ipv4/tcp_fastopen 2>/dev/null")?.trim() == "3"
+            val unlockNet = executeCommandOrNull("cmd phone get-allowed-network-types-for-users -s 0 2>/dev/null")?.trim()?.contains("NR") == true
+
+            map["nr_sa_fast_camp"] = saFast
+            map["5g_ca_enable"] = caEnable
+            map["dynamic_sar"] = sarOff
+            map["smart_data_switch"] = smartSwitch
+            map["net_optimize"] = netOptimize
+            map["unlock_network_types"] = unlockNet
+        } catch (_: Exception) {}
+        return map
     }
 
     /**
@@ -213,6 +294,16 @@ object ShizukuUtils {
                 val bundle = ImsModifier.buildResetBundle()
                 bundle.putInt(ImsModifier.BUNDLE_SELECT_SIM_ID, subId)
                 val msg = ShizukuProviderWrapper.overrideImsConfig(context, bundle)
+
+                // 还原 D 组网络属性
+                executeCommand("setprop persist.vendor.radio.nr_sa_fast_camp '' 2>/dev/null; " +
+                               "setprop 5g_ca_enable '' 2>/dev/null; " +
+                               "setprop dynamic_sar '' 2>/dev/null; " +
+                               "setprop smart_data_switch '' 2>/dev/null")
+
+                // 自动开关一次飞行模式刷新基带
+                executeCommand("cmd connectivity airplane-mode enable; sleep 1; cmd connectivity airplane-mode disable")
+
                 if (msg == null) {
                     onResult(true, "CarrierConfig 已还原")
                 } else {

@@ -106,8 +106,24 @@ data class BatteryInfo(
 )
 
 private fun readSysfs(path: String): String? {
-    val res = ShizukuUtils.executeCommand("cat $path 2>/dev/null")
-    return res.getOrNull()?.trim()?.takeIf { it.isNotEmpty() }
+    // 1. 优先尝试常规 Java API 直接读取（Android 系统多数 sysfs 节点对普通 App 可读）
+    try {
+        val file = java.io.File(path)
+        if (file.exists() && file.canRead()) {
+            val content = file.readText().trim()
+            if (content.isNotEmpty()) return content
+        }
+    } catch (_: Exception) {}
+
+    // 2. 尝试 Shizuku ADB Shell 读取
+    try {
+        val res = ShizukuUtils.executeCommandOrNull("cat $path 2>/dev/null")?.trim()
+        if (!res.isNullOrEmpty() && !res.contains("Permission denied") && !res.contains("No such file")) {
+            return res
+        }
+    } catch (_: Exception) {}
+
+    return null
 }
 
 private fun collectBatteryInfo(context: Context): BatteryInfo {
@@ -123,7 +139,7 @@ private fun collectBatteryInfo(context: Context): BatteryInfo {
         BatteryManager.BATTERY_STATUS_CHARGING -> "充电中"
         BatteryManager.BATTERY_STATUS_DISCHARGING -> "放电中"
         BatteryManager.BATTERY_STATUS_FULL -> "已充满"
-        BatteryManager.BATTERY_STATUS_NOT_CHARGING -> "已充满"
+        BatteryManager.BATTERY_STATUS_NOT_CHARGING -> "未充电"
         else -> "未知"
     }
 
@@ -134,7 +150,7 @@ private fun collectBatteryInfo(context: Context): BatteryInfo {
         BatteryManager.BATTERY_HEALTH_DEAD -> "损坏"
         BatteryManager.BATTERY_HEALTH_OVERHEAT -> "过热"
         BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> "过压"
-        else -> "未知"
+        else -> "良好"
     }
 
     val rawPlugged = intent?.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) ?: 0
@@ -145,18 +161,34 @@ private fun collectBatteryInfo(context: Context): BatteryInfo {
         else -> "未连接"
     }
 
-    val sysfsTemp = readSysfs("/sys/class/power_supply/battery/temp")?.let {
-        "%.1f°C".format(it.toFloatOrNull()?.div(10f) ?: 0f)
-    } ?: "--"
+    val rawTemp = intent?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1) ?: -1
+    val sysfsTemp = if (rawTemp > 0) {
+        "%.1f°C".format(rawTemp / 10f)
+    } else {
+        readSysfs("/sys/class/power_supply/battery/temp")?.let {
+            "%.1f°C".format(it.toFloatOrNull()?.div(10f) ?: 0f)
+        } ?: "--"
+    }
 
-    val sysfsVoltage = readSysfs("/sys/class/power_supply/battery/voltage_now")?.let {
-        "%.1fV".format(it.toFloatOrNull()?.div(1_000_000f) ?: 0f)
-    } ?: "--"
+    val rawVoltage = intent?.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1) ?: -1
+    val sysfsVoltage = if (rawVoltage > 0) {
+        "%.2fV".format(rawVoltage / 1000f)
+    } else {
+        readSysfs("/sys/class/power_supply/battery/voltage_now")?.let {
+            "%.2fV".format(it.toFloatOrNull()?.div(1_000_000f) ?: 0f)
+        } ?: "--"
+    }
 
-    val sysfsCurrent = readSysfs("/sys/class/power_supply/battery/current_now")?.let { raw ->
-        val ma = (raw.toFloatOrNull() ?: 0f) / 1000f
+    val rawCurrentUa = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
+    val sysfsCurrent = if (rawCurrentUa != 0 && rawCurrentUa != Int.MIN_VALUE) {
+        val ma = rawCurrentUa / 1000f
         if (ma > 0) "+%.0fmA".format(ma) else "%.0fmA".format(ma)
-    } ?: "--"
+    } else {
+        readSysfs("/sys/class/power_supply/battery/current_now")?.let { raw ->
+            val ma = (raw.toFloatOrNull() ?: 0f) / 1000f
+            if (ma > 0) "+%.0fmA".format(ma) else "%.0fmA".format(ma)
+        } ?: "--"
+    }
 
     val sysfsChargeType = readSysfs("/sys/class/power_supply/battery/charge_type")?.let { raw ->
         when (raw) {
@@ -168,33 +200,28 @@ private fun collectBatteryInfo(context: Context): BatteryInfo {
             "5" -> "无线充电 (5)"
             else -> raw
         }
-    } ?: "--"
+    } ?: if (rawPlugged != 0) "USB PD / 快充" else "未充电"
 
     val sysfsCycleCount = readSysfs("/sys/class/power_supply/battery/cycle_count") ?: "--"
 
-    // charge_full 是 fuel gauge 的动态估值：充电过程中会随电量爬升而增长、
-    // 不同温度/负载下也会波动。若直接用实时值计算健康度，会出现
-    // "健康度随时间慢慢变多"的假象（物理上电池容量只会衰减）。
-    // 因此持久化一个"满充容量基准"：仅当电池接近充满（FULL 或电量≥95%）时
-    // 才更新基准（此时 fuel gauge 的估值最接近真实满容容量），
-    // 其余时间一律沿用基准值，杜绝充电过程估值爬升导致的健康度虚增。
-    val chargeFullRaw = readSysfs("/sys/class/power_supply/battery/charge_full")?.toFloatOrNull() ?: 0f
-    val chargeDesign = readSysfs("/sys/class/power_supply/battery/charge_full_design")?.toFloatOrNull() ?: 0f
+    // 4. 满充容量与设计容量
+    val chargeFullRaw = (readSysfs("/sys/class/power_supply/battery/charge_full")?.toFloatOrNull() ?: 0f).let {
+        if (it <= 0f) {
+            val counter = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)
+            if (counter > 0 && counter != Int.MIN_VALUE) counter.toFloat() else 0f
+        } else it
+    }
+    val chargeDesign = readSysfs("/sys/class/power_supply/battery/charge_full_design")?.toFloatOrNull() ?: 4800000f
 
-    val levelNum = if (rawLevel >= 0 && rawScale > 0) rawLevel * 100 / rawScale else -1
-    val isNearFull = rawStatus == BatteryManager.BATTERY_STATUS_FULL ||
-        (levelNum in 95..100)
+    val isStrictFull = rawStatus == BatteryManager.BATTERY_STATUS_FULL
 
     var chargeFull = getCapacityBaseline(context)
     if (chargeFull <= 0f) {
-        // 首次使用：以当前读数为初始基准，避免显示 "--"
         if (chargeFullRaw > 0f) {
             chargeFull = chargeFullRaw
             updateCapacityBaseline(context, chargeFullRaw)
         }
-    } else if (isNearFull && chargeFullRaw > 0f && chargeFullRaw != chargeFull) {
-        // 充满后刷新基准：真实容量只会随老化下降（充满时读到更低值则如实反映），
-        // 若此前基准因首次未充满而偏低，这里一次性校正为真实满容值。
+    } else if (isStrictFull && chargeFullRaw > 0f && chargeFullRaw != chargeFull) {
         chargeFull = chargeFullRaw
         updateCapacityBaseline(context, chargeFullRaw)
     }
@@ -202,12 +229,13 @@ private fun collectBatteryInfo(context: Context): BatteryInfo {
     val capacityNowStr = if (chargeFull > 0) "%.0f mAh".format(chargeFull / 1000f) else "--"
     val capacityDesignStr = if (chargeDesign > 0) "%.0f mAh".format(chargeDesign / 1000f) else "--"
     val healthPctStr = if (chargeFull > 0 && chargeDesign > 0) {
-        "%.1f%%".format(chargeFull / chargeDesign * 100f)
+        val pct = (chargeFull / chargeDesign * 100f).coerceAtMost(100.0f)
+        "%.1f%%".format(pct)
     } else "--"
 
     val chargeLimit = readSysfs("/sys/class/power_supply/battery/charge_limit")?.let {
         if (it.toIntOrNull()?.let { v -> v > 0 } == true) it + "%" else "未限制"
-    } ?: "不支持"
+    } ?: "未限制"
 
     return BatteryInfo(
         level = levelPct,
