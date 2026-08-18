@@ -123,6 +123,12 @@
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="KeepAlive: Maintains a periodic CPU wakelock to prevent message delays for selected background apps." />
         </service>
+        <activity
+            android:name=".ui.custom.LockScreenActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:exported="true" />
     </application>
 
     <instrumentation

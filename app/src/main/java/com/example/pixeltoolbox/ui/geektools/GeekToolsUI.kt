@@ -656,6 +656,30 @@ fun GeekToolsCard(context: Context, textColor: Color, addLog: (String) -> Unit, 
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // 9. 桌面一键锁屏
+            SectionTitle("桌面一键锁屏", "创建桌面快捷方式，实现一键或双击桌面（配合桌面手势）直接锁屏")
+            iOSButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    if (androidx.core.content.pm.ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
+                        val intent = Intent(context, com.example.pixeltoolbox.ui.custom.LockScreenActivity::class.java)
+                        intent.action = Intent.ACTION_VIEW
+                        val shortcutInfo = androidx.core.content.pm.ShortcutInfoCompat.Builder(context, "lock_screen_shortcut")
+                            .setShortLabel("一键锁屏")
+                            .setIcon(androidx.core.graphics.drawable.IconCompat.createWithResource(context, com.example.pixeltoolbox.R.drawable.ic_lock_screen_shortcut))
+                            .setIntent(intent)
+                            .build()
+                        
+                        androidx.core.content.pm.ShortcutManagerCompat.requestPinShortcut(context, shortcutInfo, null)
+                        Toast.makeText(context, "已请求添加桌面快捷方式，请允许", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "当前系统桌面不支持添加快捷方式", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            ) { AutoSizeText("创建桌面快捷方式", color = Color.White, fontWeight = FontWeight.SemiBold) }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
         }
     }
 }

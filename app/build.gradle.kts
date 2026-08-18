@@ -13,8 +13,8 @@ android {
         applicationId = "com.example.pixeltoolbox"
         minSdk = 28
         targetSdk = 34
-        versionCode = 7
-        versionName = "1.1.6"
+        versionCode = 8
+        versionName = "1.1.7"
 
         // ===== Call Recording (ported from ShizuCallRecorder) =====
         // scrcpy-server binary injected into assets (see app/src/main/assets/scrcpy-server)
