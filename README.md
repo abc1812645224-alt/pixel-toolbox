@@ -69,6 +69,8 @@
     - 内置 Shizuku 权限的 Shell 终端，可自由执行系统命令。
 27. **双击桌面锁屏**
     - 创建桌面快捷方式或一键安装纯净锁屏桌面，实现双击桌面锁屏。
+28. **统一推送服务（MiPushFramework 托管）**
+    - 集成开源 xmsf.apk 底层服务包，实现国内应用推送通道无感接管，自动授予通知权限与隐藏桌面图标，即使冻结 App 也能秒收通知栏消息。支持微信 / QQ 厂商推送伪装。
 
 ## 编译方法（通过 GitHub Actions）
 
@@ -98,6 +100,7 @@
 - **ShizuCallRecorder**（kitsumed，GPL-3.0）– 通话录音核心实现思路
 - **scrcpy**（Genymobile，Apache-2.0）– 通话录音音频源 / 编码参考
 - **Shizuku**（Rikka Apps，Apache-2.0）– 系统权限桥接方案
+- **MiPushFramework**（Trumeet，GPL-3.0）– 统一推送框架 xmsf.apk 底层实现与静默托管方案
 - **AndResGuard**（360 / shwenzhang，Apache-2.0）– 资源混淆与压缩
 - **AndroidHiddenApiBypass**（LSPosed，Apache-2.0）– 隐藏 API 绕过
 - **ARSCLib**（REAndroid，Apache-2.0）– Android 二进制资源读写
