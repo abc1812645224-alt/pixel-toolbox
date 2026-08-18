@@ -267,15 +267,15 @@ fun GeekToolsCard(context: Context, textColor: Color, addLog: (String) -> Unit, 
                     onDismissRequest = { showPushDetailDialog = false },
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("已接管应用", fontWeight = FontWeight.Bold)
+                            Text("统一推送服务控制台", fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.width(8.dp))
                             Surface(
                                 shape = RoundedCornerShape(12.dp),
-                                color = Color(0xFFE8F5E9)
+                                color = if (isPushRunning) Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
                             ) {
                                 Text(
-                                    "${managedPushApps.size} 个",
-                                    color = Color(0xFF2E7D32),
+                                    if (isPushRunning) "运行中 🟢" else "已关闭 🔴",
+                                    color = if (isPushRunning) Color(0xFF2E7D32) else iOSRed,
                                     style = MaterialTheme.typography.labelMedium,
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                                 )
@@ -283,56 +283,134 @@ fun GeekToolsCard(context: Context, textColor: Color, addLog: (String) -> Unit, 
                         }
                     },
                     text = {
-                        LazyColumn(
-                            modifier = Modifier.heightIn(max = 350.dp),
-                            verticalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            items(managedPushApps) { app ->
-                                Surface(
-                                    shape = RoundedCornerShape(10.dp),
-                                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(8.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        if (app.iconBitmap != null) {
-                                            Image(
-                                                bitmap = app.iconBitmap.asImageBitmap(),
-                                                contentDescription = app.appName,
-                                                modifier = Modifier
-                                                    .size(36.dp)
-                                                    .clip(RoundedCornerShape(8.dp))
-                                            )
-                                        } else {
-                                            Box(
-                                                modifier = Modifier
-                                                    .size(36.dp)
-                                                    .clip(RoundedCornerShape(8.dp))
-                                                    .background(iOSSecondaryLabel.copy(alpha = 0.2f)),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Text("App", style = MaterialTheme.typography.labelSmall, color = iOSSecondaryLabel)
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            // 1. 微信 / QQ 厂商推送伪装
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(iOSSecondaryLabel.copy(alpha = 0.08f), RoundedCornerShape(10.dp))
+                                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text("微信 / QQ 厂商伪装", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, color = textColor)
+                                    Text("激活微信/QQ 高优先级推送通道", style = MaterialTheme.typography.labelSmall, color = iOSSecondaryLabel)
+                                }
+                                Switch(
+                                    checked = isTencentSpoofing,
+                                    onCheckedChange = { enable ->
+                                        coroutineScope.launch {
+                                            val res = if (enable)
+                                                com.example.pixeltoolbox.services.push.UnifiedPushManager.enableTencentSpoof(context)
+                                            else
+                                                com.example.pixeltoolbox.services.push.UnifiedPushManager.disableTencentSpoof(context)
+
+                                            if (res.isSuccess) {
+                                                isTencentSpoofing = enable
+                                                managedPushApps = com.example.pixeltoolbox.services.push.UnifiedPushManager.getManagedApps(context)
+                                                val msg = if (enable) "已开启 微信/QQ 厂商伪装" else "已关闭 微信/QQ 伪装"
+                                                addLog(msg)
+                                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
                                             }
                                         }
-                                        Spacer(modifier = Modifier.width(10.dp))
-                                        Column(modifier = Modifier.weight(1f)) {
-                                            Text(app.appName, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
-                                            Text(app.packageName, style = MaterialTheme.typography.labelSmall, color = iOSSecondaryLabel)
-                                        }
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        checkedThumbColor = Color.White,
+                                        checkedTrackColor = iOSBlue
+                                    )
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            Text(
+                                "已接管推送应用 (${managedPushApps.size} 个)",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = iOSSecondaryLabel
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+
+                            if (managedPushApps.isEmpty()) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(80.dp)
+                                        .background(iOSSecondaryLabel.copy(alpha = 0.05f), RoundedCornerShape(8.dp)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text("暂无检出接管 App (开启后自动识别)", style = MaterialTheme.typography.bodySmall, color = iOSSecondaryLabel)
+                                }
+                            } else {
+                                LazyColumn(
+                                    modifier = Modifier.heightIn(max = 240.dp),
+                                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                                ) {
+                                    items(managedPushApps) { app ->
                                         Surface(
-                                            shape = RoundedCornerShape(6.dp),
-                                            color = iOSGreen.copy(alpha = 0.15f)
+                                            shape = RoundedCornerShape(10.dp),
+                                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                            modifier = Modifier.fillMaxWidth()
                                         ) {
-                                            Text(
-                                                "已接管",
-                                                style = MaterialTheme.typography.labelSmall,
-                                                color = iOSGreen,
-                                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                                            )
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(8.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                if (app.iconBitmap != null) {
+                                                    Image(
+                                                        bitmap = app.iconBitmap.asImageBitmap(),
+                                                        contentDescription = app.appName,
+                                                        modifier = Modifier
+                                                            .size(36.dp)
+                                                            .clip(RoundedCornerShape(8.dp))
+                                                    )
+                                                } else {
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .size(36.dp)
+                                                            .clip(RoundedCornerShape(8.dp))
+                                                            .background(iOSSecondaryLabel.copy(alpha = 0.2f)),
+                                                        contentAlignment = Alignment.Center
+                                                    ) {
+                                                        Text("App", style = MaterialTheme.typography.labelSmall, color = iOSSecondaryLabel)
+                                                    }
+                                                }
+
+                                                Spacer(modifier = Modifier.width(10.dp))
+
+                                                Column(modifier = Modifier.weight(1f)) {
+                                                    Text(
+                                                        app.appName,
+                                                        style = MaterialTheme.typography.bodyMedium,
+                                                        fontWeight = FontWeight.SemiBold,
+                                                        maxLines = 1,
+                                                        overflow = TextOverflow.Ellipsis
+                                                    )
+                                                    Text(
+                                                        app.packageName,
+                                                        style = MaterialTheme.typography.labelSmall,
+                                                        color = iOSSecondaryLabel,
+                                                        maxLines = 1,
+                                                        overflow = TextOverflow.Ellipsis
+                                                    )
+                                                }
+
+                                                Spacer(modifier = Modifier.width(6.dp))
+
+                                                Surface(
+                                                    shape = RoundedCornerShape(4.dp),
+                                                    color = Color(0xFFE3F2FD)
+                                                ) {
+                                                    Text(
+                                                        "已托管 🟢",
+                                                        style = MaterialTheme.typography.labelSmall,
+                                                        color = Color(0xFF1976D2),
+                                                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                                    )
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -340,8 +418,49 @@ fun GeekToolsCard(context: Context, textColor: Color, addLog: (String) -> Unit, 
                         }
                     },
                     confirmButton = {
-                        TextButton(onClick = { showPushDetailDialog = false }) {
-                            Text("确定", color = iOSBlue)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            if (isPushRunning) {
+                                iOSOutlineButton(
+                                    onClick = {
+                                        if (isPushProcessing) return@iOSOutlineButton
+                                        isPushProcessing = true
+                                        coroutineScope.launch {
+                                            val res = com.example.pixeltoolbox.services.push.UnifiedPushManager.disablePushService(context)
+                                            isPushProcessing = false
+                                            isPushRunning = com.example.pixeltoolbox.services.push.UnifiedPushManager.isPushServiceRunning(context)
+                                            if (res.isSuccess) {
+                                                addLog("已关闭统一推送服务")
+                                                Toast.makeText(context, "已关闭统一推送服务", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }
+                                ) {
+                                    Text(if (isPushProcessing) "停用中..." else "停止托管", color = iOSRed, style = MaterialTheme.typography.labelLarge)
+                                }
+                            } else {
+                                iOSButton(
+                                    onClick = {
+                                        if (isPushProcessing) return@iOSButton
+                                        isPushProcessing = true
+                                        coroutineScope.launch {
+                                            val res = com.example.pixeltoolbox.services.push.UnifiedPushManager.enablePushService(context)
+                                            isPushProcessing = false
+                                            isPushRunning = com.example.pixeltoolbox.services.push.UnifiedPushManager.isPushServiceRunning(context)
+                                            managedPushApps = com.example.pixeltoolbox.services.push.UnifiedPushManager.getManagedApps(context)
+                                            if (res.isSuccess) {
+                                                addLog("已开启统一推送托管")
+                                                Toast.makeText(context, "已开启统一推送托管", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }
+                                ) {
+                                    Text(if (isPushProcessing) "开启中..." else "开启托管", color = Color.White, style = MaterialTheme.typography.labelLarge)
+                                }
+                            }
+
+                            TextButton(onClick = { showPushDetailDialog = false }) {
+                                Text("关闭", color = iOSBlue, fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
                 )

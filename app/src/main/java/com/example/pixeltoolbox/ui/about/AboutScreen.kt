@@ -286,7 +286,7 @@ fun AboutScreen() {
                     Spacer(modifier = Modifier.height(8.dp))
                     Divider(color = iOSSeparator, thickness = 0.5.dp)
                     Spacer(modifier = Modifier.height(8.dp))
-                    AcknowledgementItem("Trumeet", "MiPushFramework (xmsf)", "github.com/Trumeet/MiPushFramework", "感谢 Trumeet 开源的 xmsf 服务框架")
+                    AcknowledgementItem("Trumeet", "MiPushFramework (xmsf)", "github.com/Trumeet/MiPushFramework", "感谢 Trumeet 开源的 xmsf 服务框架 (GPL-3.0)")
                     Spacer(modifier = Modifier.height(8.dp))
                     Divider(color = iOSSeparator, thickness = 0.5.dp)
                     Spacer(modifier = Modifier.height(8.dp))
