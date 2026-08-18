@@ -100,7 +100,7 @@
 - **ShizuCallRecorder**（kitsumed，GPL-3.0）– 通话录音核心实现思路
 - **scrcpy**（Genymobile，Apache-2.0）– 通话录音音频源 / 编码参考
 - **Shizuku**（Rikka Apps，Apache-2.0）– 系统权限桥接方案
-- **MiPushFramework**（Trumeet，GPL-3.0）– 统一推送框架 xmsf.apk 底层实现与静默托管方案
+- **MiPushFramework (xmsf)**（Trumeet，GPL-3.0）– xmsf 服务框架
 - **AndResGuard**（360 / shwenzhang，Apache-2.0）– 资源混淆与压缩
 - **AndroidHiddenApiBypass**（LSPosed，Apache-2.0）– 隐藏 API 绕过
 - **ARSCLib**（REAndroid，Apache-2.0）– Android 二进制资源读写

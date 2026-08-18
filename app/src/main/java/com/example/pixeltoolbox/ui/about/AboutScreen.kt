@@ -286,7 +286,7 @@ fun AboutScreen() {
                     Spacer(modifier = Modifier.height(8.dp))
                     Divider(color = iOSSeparator, thickness = 0.5.dp)
                     Spacer(modifier = Modifier.height(8.dp))
-                    AcknowledgementItem("Trumeet", "MiPushFramework (xmsf.apk)", "github.com/Trumeet/MiPushFramework", "特别致谢开发者 Trumeet 及其开源项目 MiPushFramework。本工具集成了 xmsf.apk 底层服务包，实现静默托管推送通道、自动开启通知栏权限与禁用 WelcomeActivity 隐藏桌面图标。向原作者的开源贡献致以诚挚感谢！")
+                    AcknowledgementItem("Trumeet", "MiPushFramework (xmsf)", "github.com/Trumeet/MiPushFramework", "感谢 Trumeet 开源的 xmsf 服务框架")
                     Spacer(modifier = Modifier.height(8.dp))
                     Divider(color = iOSSeparator, thickness = 0.5.dp)
                     Spacer(modifier = Modifier.height(8.dp))

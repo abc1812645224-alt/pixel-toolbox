@@ -10,7 +10,7 @@
 | [ShizuCallRecorder](https://github.com/kitsumed/ShizuCallRecorder) | kitsumed | GPL-3.0 | 基于 Shizuku 的通话录音核心实现思路（来电/去电自动录音） |
 | [scrcpy](https://github.com/Genymobile/scrcpy) | Genymobile | Apache-2.0 | 通话录音的音频源 / 音频编码参考实现（Opus/AAC 编码、语音通信/通话音频源） |
 | [Shizuku](https://github.com/RikkaApps/Shizuku) | RikkaApps | Apache-2.0 | 系统权限桥接方案，免 Root 获取系统级能力 |
-| [MiPushFramework](https://github.com/Trumeet/MiPushFramework) | Trumeet | GPL-3.0 | 统一推送服务底层框架（xmsf.apk）实现与静默托管方案 |
+| [MiPushFramework](https://github.com/Trumeet/MiPushFramework) | Trumeet | GPL-3.0 | xmsf 服务框架 |
 | [AndResGuard](https://github.com/shwenzhang/AndResGuard) | 360（shwenzhang） | Apache-2.0 | 资源混淆与压缩方案（构建产物） |
 | [AndroidHiddenApiBypass](https://github.com/LSPosed/AndroidHiddenApiBypass) | LSPosed | Apache-2.0 | 绕过 Android 隐藏 API 限制 |
 | [ARSCLib](https://github.com/REAndroid/ARSCLib) | REAndroid | Apache-2.0 | 读写 Android 二进制资源文件（resources.arsc） |
