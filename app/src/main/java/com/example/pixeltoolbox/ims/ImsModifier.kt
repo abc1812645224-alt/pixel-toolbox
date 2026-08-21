@@ -130,9 +130,9 @@ object ImsModifier {
                 b.putIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRP_THRESHOLDS_INT_ARRAY, thresholds)
                 b.putIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRQ_THRESHOLDS_INT_ARRAY, intArrayOf(-38, -28, -18, -8))
                 b.putIntArray(CarrierConfigManager.KEY_5G_NR_SSSINR_THRESHOLDS_INT_ARRAY, intArrayOf(-23, -13, -3, 7))
-                // 5G+ 带宽阈值：四大运营商（移动/联通/电信/广电）NR 带宽普遍为 100MHz，
-                // 阈值设为 100MHz(100000kHz)，实际带宽 >=100MHz 即触发 5G+（NR_ADVANCED）。
-                b.putInt("nr_advanced_threshold_bandwidth_khz_int", 100000)
+                // 5G+ 带宽阈值：四大运营商（移动/联通、电话、广电）NR 带宽普遍为 130MHz，
+                // 阈值设为 130MHz(130000kHz)，实际带宽 >=130MHz 即触发 5G+（NR_ADVANCED）。
+                b.putInt("nr_advanced_threshold_bandwidth_khz_int", 130000)
                 b.putBoolean("include_lte_for_nr_advanced_threshold_bandwidth_bool", false)
                 b.putIntArray("additional_nr_advanced_bands_int_array", intArrayOf(1, 3, 8, 28, 41, 78, 79))
                 b.putString("5g_icon_configuration_string", "connected_mmwave:5G_Plus,connected:5G,connected_rrc_idle:5G,not_restricted_rrc_idle:5G,not_restricted_rrc_con:5G")

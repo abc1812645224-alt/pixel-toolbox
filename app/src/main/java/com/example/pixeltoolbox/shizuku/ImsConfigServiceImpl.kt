@@ -115,7 +115,7 @@ class ImsConfigServiceImpl : IImsConfigService.Stub() {
 
         // ─── 5GA icon ───
         if (json.optBoolean("5ga_icon", false)) {
-            exec("settings put global nr_advanced_threshold_bandwidth_khz 100000")
+            exec("settings put global nr_advanced_threshold_bandwidth_khz 130000")
         }
 
         // ─── Cross SIM ───

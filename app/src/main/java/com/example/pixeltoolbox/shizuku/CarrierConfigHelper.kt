@@ -159,7 +159,7 @@ object CarrierConfigHelper {
                     // 带宽阈值：四大运营商（移动/联通/电信/广电）NR 带宽普遍为 100MHz，
                     // 阈值设为 100MHz(100000kHz)，实际带宽 >=100MHz 即触发 5G+（NR_ADVANCED）。
                     if (json.optBoolean("5ga_icon", false)) {
-                        pb.putInt("nr_advanced_threshold_bandwidth_khz_int", 100000)
+                        pb.putInt("nr_advanced_threshold_bandwidth_khz_int", 130000)
                         pb.putBoolean("include_lte_for_nr_advanced_threshold_bandwidth_bool", false)
                         pb.putIntArray("additional_nr_advanced_bands_int_array",
                             intArrayOf(1, 3, 8, 28, 41, 78, 79))

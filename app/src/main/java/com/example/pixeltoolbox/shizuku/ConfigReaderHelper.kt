@@ -75,7 +75,7 @@ object ConfigReaderHelper {
             }
             val ssrsrp = config.getIntArray(CarrierConfigManager.KEY_5G_NR_SSRSRP_THRESHOLDS_INT_ARRAY)
             json.put("5g_signal", ssrsrp != null && ssrsrp.size >= 4)
-            json.put("5ga_icon", config.getInt("nr_advanced_threshold_bandwidth_khz_int") == 100000)
+            json.put("5ga_icon", config.getInt("nr_advanced_threshold_bandwidth_khz_int") == 130000)
             json.put("volte", config.getBoolean(CarrierConfigManager.KEY_CARRIER_VOLTE_AVAILABLE_BOOL, false))
             json.put("vowifi", config.getBoolean(CarrierConfigManager.KEY_CARRIER_WFC_IMS_AVAILABLE_BOOL, false))
             json.put("vilte", config.getBoolean(CarrierConfigManager.KEY_CARRIER_VT_AVAILABLE_BOOL, false))

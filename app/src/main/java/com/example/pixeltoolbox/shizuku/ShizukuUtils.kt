@@ -161,7 +161,7 @@ object ShizukuUtils {
             map["5g_signal"] = ssrsrp != null && ssrsrp.size >= 4
 
             val nrAdv = result.getInt("nr_advanced_threshold_bandwidth_khz_int", 0)
-            map["5ga_icon"] = nrAdv == 100000
+            map["5ga_icon"] = nrAdv == 130000
 
             map["volte"] = result.getBoolean(android.telephony.CarrierConfigManager.KEY_CARRIER_VOLTE_AVAILABLE_BOOL, false)
             map["vowifi"] = result.getBoolean(android.telephony.CarrierConfigManager.KEY_CARRIER_WFC_IMS_AVAILABLE_BOOL, false)
@@ -249,7 +249,7 @@ object ShizukuUtils {
                 map["5g_signal"] = ssrsrp != null && ssrsrp.size >= 4
 
                 val nrAdv: Int = result.getInt("nr_advanced_threshold_bandwidth_khz_int", 0)
-                map["5ga_icon"] = nrAdv == 100000
+                map["5ga_icon"] = nrAdv == 130000
 
                 // Voice
                 map["volte"] = result.getBoolean(

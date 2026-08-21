@@ -44,7 +44,7 @@ class ImsModifier : Instrumentation() {
             "include_lte_for_nr_advanced_threshold_bandwidth_bool"
         // 5G+ 带宽阈值：四大运营商（移动/联通/电信/广电）NR 带宽普遍为 100MHz，
         // 阈值设为 100MHz(100000kHz)，实际带宽 >=100MHz 即触发 5G+（NR_ADVANCED）。
-        private const val NR_ADVANCED_THRESHOLD_KHZ_FOR_5GA = 100_000
+        private const val NR_ADVANCED_THRESHOLD_KHZ_FOR_5GA = 130_000
         private const val NR_ICON_CONFIGURATION_5GA =
             "connected_mmwave:5G_Plus,connected:5G_Plus,connected_rrc_idle:5G,not_restricted_rrc_idle:5G,not_restricted_rrc_con:5G"
         private const val BUNDLE_COUNTRY_MCC_OVERRIDE = "country_mcc_override"

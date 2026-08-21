@@ -103,7 +103,7 @@ class ConfigReaderInstrumentation : Instrumentation() {
                 results.putBoolean(KEY_5G_SIGNAL, ssrsrp != null && ssrsrp.size >= 4)
 
                 val nrAdv: Int = config.getInt("nr_advanced_threshold_bandwidth_khz_int", 0)
-                results.putBoolean(KEY_5GA_ICON, nrAdv == 100000)
+                results.putBoolean(KEY_5GA_ICON, nrAdv == 130000)
 
                 // Voice
                 results.putBoolean(KEY_VOLTE, config.getBoolean(CarrierConfigManager.KEY_CARRIER_VOLTE_AVAILABLE_BOOL, false))
